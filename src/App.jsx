@@ -1,0 +1,24 @@
+import NavBar from './components/NavBar'
+import HomePage from './components/HomePage';
+import './App.css'
+import './css/NavBar.css'
+import './css/HomePage.css'
+import { createBrowserRouter as Routes, Route, BrowserRouter, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom'
+
+function App() {
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path="/" element={<NavBar />}>
+        <Route path="/" element={<HomePage />} />
+      </Route>
+    )
+  );
+
+  return (
+    <div className="App">
+      <RouterProvider router={router}/>
+    </div>
+  );
+}
+
+export default App

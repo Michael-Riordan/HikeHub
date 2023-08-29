@@ -1,10 +1,41 @@
-#homepage-header-section {
+/*.homepage-header-section.one {
     display: flex;
-    background-image: url('../assets/Hiking-Trail.jpg');
+    background-image: url('../assets/Hiking-Trail-1.jpg');
     background-position: center top -150px;
     background-size: cover;
     height: 50vh;
     justify-content: center;
+}
+
+.homepage-header-section.two {
+    display: flex;
+    background-image: url('../assets/Hiking-Trail-2.jpg');
+    background-position: center;
+    background-size: cover;
+    height: 50vh;
+    justify-content: center;
+}
+
+.homepage-header-section.three {
+    display: flex;
+    background-image: url('../assets/Hiking-Trail-3.jpg');
+    background-position: center;
+    background-size: cover;
+    height: 50vh;
+    justify-content: center;
+}
+*/
+
+
+.homepage-header-section {
+    display: flex;
+    height: 50vh;
+    justify-content: center;
+}
+
+#slide-image {
+    width: 100vw;
+    height: 50vh;
 }
 
 #homepage-content {

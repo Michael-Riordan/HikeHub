@@ -1,44 +1,34 @@
-/*.homepage-header-section.one {
-    display: flex;
-    background-image: url('../assets/Hiking-Trail-1.jpg');
-    background-position: center top -150px;
-    background-size: cover;
-    height: 50vh;
-    justify-content: center;
-}
-
-.homepage-header-section.two {
-    display: flex;
-    background-image: url('../assets/Hiking-Trail-2.jpg');
-    background-position: center;
-    background-size: cover;
-    height: 50vh;
-    justify-content: center;
-}
-
-.homepage-header-section.three {
-    display: flex;
-    background-image: url('../assets/Hiking-Trail-3.jpg');
-    background-position: center;
-    background-size: cover;
-    height: 50vh;
-    justify-content: center;
-}
-*/
-
 
 .homepage-header-section {
     display: flex;
-    height: 50vh;
+    position: relative;
+    overflow: hidden;
+    height: 70vh;
     justify-content: center;
 }
 
-#slide-image {
-    width: 100vw;
-    height: 50vh;
+.slideshow-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, transform 6s ease-in-out;
+}
+
+.slideshow-image.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.slideshow-image.zoomed {
+    transform: scale(1.1);
 }
 
 #homepage-content {
+    position: absolute;
     margin-top: 15vh;
     padding: 20px;
     margin-bottom: 100px;
@@ -50,4 +40,34 @@
     text-align: center;
     font-size: 4rem;
     font-family:"DMSerif";
+}
+
+#Autocomplete {
+    background-color: white;
+}
+
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+    color: rgb(204, 232, 138) !important;
+    font-weight: bold;
+    border: black;
+}
+
+.MuiAutocomplete-hasPopupIcon {
+    margin-top: 20px;
+    background-color: white;
+    border: black;
+}
+
+@media (orientation: portrait) {
+    #homepage-header {
+        font-size: 30px;
+    }
+
+    #homepage-content {
+        margin-top: 5vh;
+    }
+
+    .homepage-header-section {
+        height: 30vh;
+    }
 }

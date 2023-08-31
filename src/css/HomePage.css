@@ -34,6 +34,11 @@
     margin-bottom: 100px;
 }
 
+#search-prompt {
+    display: flex;
+    justify-content: center;
+}
+
 #homepage-header {
     color:white;
     margin: 0;
@@ -43,13 +48,15 @@
 }
 
 #Autocomplete {
-    background-color: white;
+    align-self: center;
 }
 
 .css-1jy569b-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
-    color: rgb(204, 232, 138) !important;
-    font-weight: bold;
     border: black;
+}
+
+.css-108j1ea-MuiAutocomplete-root .MuiFilledInput-root.MuiInputBase-hiddenLabel {
+    height: 4vw;
 }
 
 .MuiAutocomplete-hasPopupIcon {

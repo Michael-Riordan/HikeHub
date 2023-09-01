@@ -3,16 +3,14 @@ import AdventureAutocomplete from "./AdventureAutocomplete";
 
 export default function SlideShow({images}) {
     const [currentIndex, setCurrentIndex] = useState(0);
-
-    const adventures = [
-        'Hiking',
-        'Camping',
-        'Biking',
-        'Fishing',
-    ]
+    const [selectedActivity, setSelectedActivity] = useState('');
 
     const goToNext = () => {
         setCurrentIndex((prevIndex) => prevIndex === 0 ? 1 : prevIndex === 1 ? 2 : 0)
+    }
+
+    const onDataReceived = (data) => {
+        setSelectedActivity(data);
     }
 
     useEffect(() => {
@@ -39,7 +37,7 @@ export default function SlideShow({images}) {
                 <div className='header-overlay'>
                     <h1 id='homepage-header'>Plan Your Adventure</h1>
                     <div id='search-prompt'>
-                        <AdventureAutocomplete />
+                        <AdventureAutocomplete onData={onDataReceived}/>
                     </div>
                 </div>
             </div>

@@ -3,6 +3,7 @@ import HomePage from './components/HomePage';
 import './App.css'
 import './css/NavBar.css'
 import './css/HomePage.css'
+import './css/AdventureAutocomplete.css'
 import { createBrowserRouter as Routes, Route, BrowserRouter, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom'
 
 function App() {

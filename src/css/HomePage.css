@@ -1,4 +1,9 @@
 
+@font-face {
+    font-family: 'Roboto';
+    src: url('../assets/Roboto-Regular.ttf');
+}
+
 .homepage-header-section {
     display: flex;
     position: relative;
@@ -47,22 +52,15 @@
     font-family:"DMSerif";
 }
 
-#Autocomplete {
-    align-self: center;
+#hikehub-info-section {
+    display: flex;
+    justify-content: center;
 }
 
-.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
-    border: black;
-}
-
-.css-108j1ea-MuiAutocomplete-root .MuiFilledInput-root.MuiInputBase-hiddenLabel {
-    height: 4vw;
-}
-
-.MuiAutocomplete-hasPopupIcon {
-    margin-top: 20px;
-    background-color: white;
-    border: black;
+#info-section-header {
+    font-size: 3rem;
+    color: white;
+    font-family: 'DMSerif';
 }
 
 @media (orientation: portrait) {

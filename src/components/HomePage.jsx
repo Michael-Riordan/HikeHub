@@ -2,10 +2,11 @@ import SlideShow from "./SlideShow";
 import HikingTrail1 from '../assets/Hiking-Trail-1.jpg'
 import HikingTrail2 from '../assets/Hiking-Trail-2.jpg'
 import HikingTrail3 from '../assets/Hiking-Trail-3.jpg'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function HomePage() {
     const [userLocation, setUserLocation] = useState(null);
+    console.log(userLocation);
 
     const images = [
         HikingTrail1,

@@ -7,6 +7,8 @@ export default function AdventureAutocomplete({ onData }) {
     const [selectedActivity, setSelectedActivity] = useState('');
     const [selectedActivityID, setSelectedActivityID] = useState(null);
     const [loadedMore, setLoadedMore] = useState(false);
+    const [currentCount, setCurrentCount] = useState(null);
+    const [totalCount, setTotalCount] = useState(null);
     const listboxRef = useRef(null);
 
     const sendDataToParent = () => {
@@ -39,8 +41,8 @@ export default function AdventureAutocomplete({ onData }) {
                 activityID: activity.ActivityID,
             })
         })
-        const newActivities = [...activities, ...additionalActivities];
-        setActivities(newActivities);
+        setCurrentCount((prevCount) => prevCount + jsonResponse.METADATA.RESULTS.CURRENT_COUNT);
+        setActivities((prevActivities) => [...prevActivities, ...additionalActivities]);
         setLoadedMore(true);
     });
 
@@ -50,8 +52,9 @@ export default function AdventureAutocomplete({ onData }) {
             listboxRef.current.scrollTop + listboxRef.current.clientHeight >= 
             listboxRef.current.scrollHeight
         ) {
-            loadMoreActivities();
-            console.log('scrolled to bottom');
+            if (currentCount == null || currentCount < totalCount) {
+                loadMoreActivities();
+            }
         }
     }
 
@@ -69,6 +72,8 @@ export default function AdventureAutocomplete({ onData }) {
                 });
             });
             setActivities(activityList);
+            setCurrentCount(jsonResponse.METADATA.RESULTS.CURRENT_COUNT);
+            setTotalCount(jsonResponse.METADATA.RESULTS.TOTAL_COUNT);
         }
 
         fetchActivities();

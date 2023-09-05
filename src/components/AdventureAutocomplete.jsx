@@ -27,7 +27,6 @@ export default function AdventureAutocomplete({ onData }) {
     }
 
     const loadMoreActivities = useCallback( async () => {
-        console.log('fetching more');
         let offset;
 
         loadedMore ? offset = 100 : offset = 50;
@@ -62,7 +61,6 @@ export default function AdventureAutocomplete({ onData }) {
         const activityList = [];
 
         const fetchActivities = async () => {
-            console.log('fetching');
             const response = await fetch('http://localhost:3000/api/activities');
             const jsonResponse = await response.json();
             jsonResponse.RECDATA.forEach((activity) => {
@@ -95,7 +93,7 @@ export default function AdventureAutocomplete({ onData }) {
                 }}
                 renderInput={(params) => 
                     <TextField {...params} 
-                        label='Adventures' 
+                        label='Scroll for all Adventures' 
                         color="success" 
                         hiddenLabel={true} 
                         variant="filled" 

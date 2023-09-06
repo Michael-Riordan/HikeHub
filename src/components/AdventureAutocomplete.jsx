@@ -46,6 +46,7 @@ export default function AdventureAutocomplete({ onData }) {
     });
 
     const handleScroll = () => {
+        console.log(listboxRef.current, listboxRef.current.scrollTop, listboxRef.current.clientHeight, listboxRef.current.scrollHeight)
         if (
             listboxRef.current &&
             listboxRef.current.scrollTop + listboxRef.current.clientHeight >= 
@@ -61,7 +62,7 @@ export default function AdventureAutocomplete({ onData }) {
         const activityList = [];
 
         const fetchActivities = async () => {
-            const response = await fetch('http://localhost:3000/api/activities');
+            const response = await fetch('http://192.168.0.59:3000/api/activities');
             const jsonResponse = await response.json();
             jsonResponse.RECDATA.forEach((activity) => {
                 activityList.push({

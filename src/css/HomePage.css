@@ -41,6 +41,7 @@
 
 #search-prompt {
     display: flex;
+    height: max-content;
     justify-content: center;
 }
 
@@ -52,8 +53,9 @@
     font-family:"DMSerif";
 }
 
-#hikehub-info-section {
+#homepage-info-section {
     display: flex;
+    flex-direction: column;
     justify-content: center;
 }
 
@@ -61,11 +63,58 @@
     font-size: 3rem;
     color: white;
     font-family: 'DMSerif';
+    text-align: center;
+}
+
+#adventures-header {
+    color: white;
+    font-family: 'DMSerif';
+    font-size: 2rem;
+    margin-left: 20px;
+    margin-bottom: 0;
+}
+
+#homepage-near-you-wrapper {
+    display: flex;
+    white-space: nowrap;
+    overflow-x: auto;
+    gap: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#areaAndImage {
+    display: flex;
+    border: 2px solid white;
+    background-color: rgb(75, 114, 75);
+    padding: 20px;
+    border-radius: 20px;
+    flex-direction: column;
+    text-align: center;
+    box-shadow: 2px 2px 4px 2px black;
+    margin-bottom: 10px;
+}
+
+.recAreaImage {
+    width: 300px;
+    height: 200px;
+    align-self: center;
+    border: 1px solid white;
+}
+
+#rec-area-name {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 2px;
+}
+
+#image-title {
+    color: white;
 }
 
 @media (orientation: portrait) {
     #homepage-header {
-        font-size: 30px;
+        font-size: 3rem;
     }
 
     #homepage-content {

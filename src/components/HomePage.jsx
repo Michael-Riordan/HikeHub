@@ -4,6 +4,7 @@ import HikingTrail2 from '../assets/Hiking-Trail-2.jpg'
 import HikingTrail3 from '../assets/Hiking-Trail-3.jpg'
 import NoImageIcon from '../assets/no-image-icon.jpg'
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function HomePage() {
     const [userLocation, setUserLocation] = useState(null);
@@ -12,12 +13,19 @@ export default function HomePage() {
     const [recAreas, setRecAreas] = useState([]);
     const [recAreaImages, setRecAreaImages] = useState([]);
     const [nationalParksByArea, setNationalParksByArea] = useState([]);
+    const [selectedNationalParkID, setSelectedNationalParkID] = useState(null);
+
+    const navigate = useNavigate();
 
     const images = [
         HikingTrail1,
         HikingTrail2,
         HikingTrail3,
     ]
+
+    const handleNationalParkClick = (id) => {
+        navigate('/NatParkPage')
+    }
 
     useEffect(() => {
         if ('geolocation' in navigator) {
@@ -112,7 +120,7 @@ export default function HomePage() {
         <section id='homepage-body'>
             <SlideShow images={images}/>
             <section id='homepage-info-section'>
-                <h1 id='info-section-header'>All Outdoor Adventures In One Place</h1>
+                <h1 id='info-section-header'>Adventures Near You</h1>
                 <section id='national-parks-section'>
                     <h2 id='adventures-header'>National Parks In {userState}</h2>
                     <div id='homepage-near-you-wrapper'>
@@ -128,11 +136,19 @@ export default function HomePage() {
                                     parkImageTitle = `No Image Available for ${park.fullName}`
                                 }
                                 return (
-                                    <div id='areaAndImage'>
+                                    <Link 
+                                        id='areaAndImage' 
+                                        onClick={() => {
+                                            handleNationalParkClick(park.id);
+                                        }} 
+                                        key={park.fullName}
+                                        to='/NatParkPage' 
+                                        state={park.parkCode}
+                                    >
                                         <h1 id='rec-area-name'>{park.fullName}</h1>
                                         <img src={parkImage} alt={`${park.fullName} photo`} className='recAreaImage'/>
                                         <p id='image-title'>{parkImageTitle}</p>
-                                    </div>
+                                    </Link>
                                 );
                             })
                         }
@@ -154,9 +170,9 @@ export default function HomePage() {
                                    }
                                 })
                                 return (
-                                    <div id='areaAndImage'>
-                                        <h1 key={recArea.RecAreaID} id='rec-area-name'>{recArea.RecAreaName}</h1>
-                                        <a href={imageLink} key={recArea.RecAreaName}>
+                                    <div id='areaAndImage' key={recArea.RecAreaID}>
+                                        <h1 id='rec-area-name'>{recArea.RecAreaName}</h1>
+                                        <a href={imageLink}>
                                             <img src={imageLink} alt='rec area image' className='recAreaImage'/>
                                         </a>
                                         <p id='image-title'>{imageLink === NoImageIcon? `No Image Available for ${recArea.RecAreaName}` : imageTitle}</p>

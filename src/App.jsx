@@ -1,5 +1,6 @@
 import NavBar from './components/NavBar'
 import HomePage from './components/HomePage';
+import NatParkPage from './components/NatParkPage';
 import './App.css'
 import './css/NavBar.css'
 import './css/HomePage.css'
@@ -11,6 +12,7 @@ function App() {
     createRoutesFromElements(
       <Route path="/" element={<NavBar />}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/NatParkPage" element={<NatParkPage />} />
       </Route>
     )
   );

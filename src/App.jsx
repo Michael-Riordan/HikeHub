@@ -6,6 +6,7 @@ import './css/NavBar.css'
 import './css/HomePage.css'
 import './css/AdventureAutocomplete.css'
 import { createBrowserRouter as Routes, Route, BrowserRouter, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom'
+import RecAreaPage from './components/RecAreaPage';
 
 function App() {
   const router = createBrowserRouter(
@@ -13,6 +14,7 @@ function App() {
       <Route path="/" element={<NavBar />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/NatParkPage" element={<NatParkPage />} />
+        <Route path="/RecAreaPage" element={<RecAreaPage />} />
       </Route>
     )
   );

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 export default function NatParkPage() {
     const location = useLocation();
     const [parkCode, setParkCode] = useState(location.state);
-    console.log(parkCode);
 
     /*useEffect(() => {
 
@@ -15,6 +14,6 @@ export default function NatParkPage() {
     */
 
     return (
-        <h1>Hello World</h1>
+        <h1>Hello World {parkCode}</h1>
     );
 }

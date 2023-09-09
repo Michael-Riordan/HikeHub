@@ -61,8 +61,8 @@ export default function HomePage() {
         const areas = [];
 
         const fetchRecAreas = async () => {
-            const coordinateQuery = `?coordinates=${encodeURIComponent(JSON.stringify(userLocation))}`
-            const result = await fetch(`http://192.168.0.59:3000/api/recAreas${coordinateQuery}`);
+            const stateCodeQuery= `?stateCode=${userState}`;
+            const result = await fetch(`http://192.168.0.59:3000/api/recAreas${stateCodeQuery}`);
             const jsonResult = await result.json();
             jsonResult.RECDATA.forEach(recArea => {
                 areas.push(recArea);
@@ -79,7 +79,7 @@ export default function HomePage() {
     useEffect(() => {
         const URLS = [];
 
-        const fetchRecAreaImg = async (id) => {
+        const fetchRecAreaImg = async (id, name) => {
             const IdQuery = `?id=${id}`
             const results = await fetch(`http://192.168.0.59:3000/api/recAreaImg${IdQuery}`)
             const jsonResults = await results.json();
@@ -88,18 +88,17 @@ export default function HomePage() {
                 const imageURL = jsonResults.RECDATA[0].URL;
                 const recAreaID = id;
                 const titleAndImage = {
+                    recAreaName: name,
                     title: title,
                     imageURL: imageURL,
                     recAreaID: recAreaID,
                 }
-                URLS.push(titleAndImage);
-                setRecAreaImages(URLS);
+                setRecAreaImages((prevArray) => [...prevArray, titleAndImage]);
             }
-
         }
-
+        
         recAreas.forEach(recArea => {
-            fetchRecAreaImg(recArea.RecAreaID);
+            fetchRecAreaImg(recArea.RecAreaID, recArea.RecAreaName);
         })
     }, [recAreas])
 
@@ -158,25 +157,17 @@ export default function HomePage() {
                     <h2 id='adventures-header'>Recreation Areas Near {userTown}</h2>
                     <div id='homepage-near-you-wrapper'>
                         {
-                            recAreas.map((recArea) => {
-                                let imageLink;
-                                let imageTitle;
-                                recAreaImages.forEach(image => {
-                                    if (image.recAreaID === recArea.RecAreaID) {
-                                        imageLink = image.imageURL;
-                                        imageTitle = image.title;
-                                   } else {
-                                    imageLink = NoImageIcon;
-                                   }
-                                })
+                            recAreaImages.map((recArea) => {
                                 return (
-                                    <div id='areaAndImage' key={recArea.RecAreaID}>
-                                        <h1 id='rec-area-name'>{recArea.RecAreaName}</h1>
-                                        <a href={imageLink}>
-                                            <img src={imageLink} alt='rec area image' className='recAreaImage'/>
-                                        </a>
-                                        <p id='image-title'>{imageLink === NoImageIcon? `No Image Available for ${recArea.RecAreaName}` : imageTitle}</p>
-                                    </div>
+                                    <Link id='areaAndImage' 
+                                          key={recArea.recAreaID}
+                                          to='/RecAreaPage'
+                                          state={recArea.recAreaID}
+                                    >
+                                        <h1 id='rec-area-name'>{recArea.recAreaName}</h1>
+                                        <img src={recArea.imageURL} alt='rec area image' className='recAreaImage'/>
+                                        <p id='image-title'>{recArea.title}</p>
+                                    </Link>
                                 );
                             })
                         }

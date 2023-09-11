@@ -14,6 +14,7 @@ export default function HomePage() {
     const [recAreaImages, setRecAreaImages] = useState([]);
     const [nationalParksByArea, setNationalParksByArea] = useState([]);
     const [selectedNationalParkID, setSelectedNationalParkID] = useState(null);
+    const [allRecAreaImages, setAllRecAreaImages] = useState([]);
 
     const navigate = useNavigate();
 
@@ -24,6 +25,7 @@ export default function HomePage() {
     ]
 
     const handleNationalParkClick = (id) => {
+
         navigate('/NatParkPage')
     }
 
@@ -93,6 +95,7 @@ export default function HomePage() {
                     imageURL: imageURL,
                     recAreaID: recAreaID,
                 }
+                setAllRecAreaImages((prevImages) => [...prevImages, jsonResults]);
                 setRecAreaImages((prevArray) => [...prevArray, titleAndImage]);
             }
         }
@@ -137,12 +140,9 @@ export default function HomePage() {
                                 return (
                                     <Link 
                                         id='areaAndImage' 
-                                        onClick={() => {
-                                            handleNationalParkClick(park.id);
-                                        }} 
                                         key={park.fullName}
                                         to='/NatParkPage' 
-                                        state={park.parkCode}
+                                        state={park}
                                     >
                                         <h1 id='rec-area-name'>{park.fullName}</h1>
                                         <img src={parkImage} alt={`${park.fullName} photo`} className='recAreaImage'/>
@@ -162,7 +162,7 @@ export default function HomePage() {
                                     <Link id='areaAndImage' 
                                           key={recArea.recAreaID}
                                           to='/RecAreaPage'
-                                          state={recArea.recAreaID}
+                                          state={{selectedRecArea: recArea.recAreaID, recAreas: recAreas, recAreaImages: allRecAreaImages}}
                                     >
                                         <h1 id='rec-area-name'>{recArea.recAreaName}</h1>
                                         <img src={recArea.imageURL} alt='rec area image' className='recAreaImage'/>

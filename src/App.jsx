@@ -5,6 +5,7 @@ import './App.css'
 import './css/NavBar.css'
 import './css/HomePage.css'
 import './css/AdventureAutocomplete.css'
+import './css/RecAreaPage.css'
 import { createBrowserRouter as Routes, Route, BrowserRouter, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom'
 import RecAreaPage from './components/RecAreaPage';
 

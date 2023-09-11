@@ -1,8 +1,9 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+
 export default function NatParkPage() {
     const location = useLocation();
-    const [parkCode, setParkCode] = useState(location.state);
+    const [park, setPark] = useState(location.state);
 
     /*useEffect(() => {
 
@@ -14,6 +15,6 @@ export default function NatParkPage() {
     */
 
     return (
-        <h1>Hello World {parkCode}</h1>
+        <h1>Hello World {park.fullName}</h1>
     );
 }

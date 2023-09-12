@@ -4,30 +4,22 @@ import HikingTrail2 from '../assets/Hiking-Trail-2.jpg'
 import HikingTrail3 from '../assets/Hiking-Trail-3.jpg'
 import NoImageIcon from '../assets/no-image-icon.jpg'
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
     const [userLocation, setUserLocation] = useState(null);
-    const [userTown, setUserTown] = useState(null);
     const [userState, setUserState] = useState(null);
     const [recAreas, setRecAreas] = useState([]);
     const [recAreaImages, setRecAreaImages] = useState([]);
     const [nationalParksByArea, setNationalParksByArea] = useState([]);
-    const [selectedNationalParkID, setSelectedNationalParkID] = useState(null);
     const [allRecAreaImages, setAllRecAreaImages] = useState([]);
-
-    const navigate = useNavigate();
+    const [dataFetched, setDataFetched] = useState(false);
 
     const images = [
         HikingTrail1,
         HikingTrail2,
         HikingTrail3,
-    ]
-
-    const handleNationalParkClick = (id) => {
-
-        navigate('/NatParkPage')
-    }
+    ];
 
     useEffect(() => {
         if ('geolocation' in navigator) {
@@ -44,17 +36,21 @@ export default function HomePage() {
     }, []);
 
     useEffect(() => {
-        if (userLocation != null) {
+
+        //fetches user location based off of users geolocation 
+        if (userLocation != null && userState == null) {
             const fetchLocation = async () => {
+                console.log('fetching state');
                 const coordinateQuery = `?coordinates=${encodeURIComponent(JSON.stringify(userLocation))}`
                 const result = await fetch(`http://192.168.0.59:3000/api/geolocation${coordinateQuery}`);
                 const jsonResult = await result.json();
-                const town = jsonResult.results[7].formatted_address.split(' ')[0].replace(',', '');
                 const state = jsonResult.plus_code.compound_code.split(' ')[2].replace(',', '');
                 setUserState(state);
-                setUserTown(town);
+                sessionStorage.setItem('userState', state);
             }
             fetchLocation();
+        } else {
+            setUserState(sessionStorage.getItem('userState'));
         }
 
     }, [userLocation]);
@@ -79,8 +75,10 @@ export default function HomePage() {
     }, [userLocation, userState])
 
     useEffect(() => {
-        const URLS = [];
+        const storedImageData = JSON.parse(sessionStorage.getItem('recAreaImages'));
+        const storedAllImagesData = JSON.parse(sessionStorage.getItem('allRecImages'));
 
+        //fetches each img related to a rec area specified by id
         const fetchRecAreaImg = async (id, name) => {
             const IdQuery = `?id=${id}`
             const results = await fetch(`http://192.168.0.59:3000/api/recAreaImg${IdQuery}`)
@@ -100,23 +98,45 @@ export default function HomePage() {
             }
         }
         
-        recAreas.forEach(recArea => {
-            fetchRecAreaImg(recArea.RecAreaID, recArea.RecAreaName);
-        })
-    }, [recAreas])
+        if (storedImageData.length > 0) {
+            setAllRecAreaImages(storedAllImagesData)
+            setRecAreaImages(storedImageData);
+        } else {
+            recAreas.forEach(recArea => {
+                console.log('fetching image data');
+                fetchRecAreaImg(recArea.RecAreaID, recArea.RecAreaName);
+            }) 
+        }
+    }, [recAreas]);
 
     useEffect(() => {
-
+        const storedData = JSON.parse(sessionStorage.getItem('nationalParks'));
+        
+        //fetches national parks by state code
         const fetchNationalParks = async () => {
             const stateCodeQuery = `?stateCode=${userState}`
             const results = await fetch (`http://192.168.0.59:3000/api/NationalParks${stateCodeQuery}`);
             const jsonResults = await results.json();
             setNationalParksByArea(jsonResults.data);
+            sessionStorage.setItem('nationalParks', JSON.stringify(jsonResults.data));
         } 
+        
+        if (storedData && storedData.length > 0) {
+            setNationalParksByArea(storedData);
+            setDataFetched(true);
+        } else if (!dataFetched) {
+            fetchNationalParks();
+        }
 
-        fetchNationalParks();
+    }, [userState, nationalParksByArea]);
 
-    }, [userState]);
+    useEffect(() => {
+
+        //sets sessionStorage on the last modification of image states
+        sessionStorage.setItem('recAreaImages', JSON.stringify(recAreaImages));
+        sessionStorage.setItem('allRecImages', JSON.stringify(allRecAreaImages));
+
+    }, [allRecAreaImages, recAreaImages])
 
     return (
         <section id='homepage-body'>
@@ -127,6 +147,7 @@ export default function HomePage() {
                     <h2 id='adventures-header'>National Parks In {userState}</h2>
                     <div id='homepage-near-you-wrapper'>
                         {
+                            nationalParksByArea.length > 0 ?
                             nationalParksByArea.map((park) => {
                                 let parkImage;
                                 let parkImageTitle;
@@ -149,12 +170,12 @@ export default function HomePage() {
                                         <p id='image-title'>{parkImageTitle}</p>
                                     </Link>
                                 );
-                            })
+                            }) : ''
                         }
                     </div>
                 </section>
                 <section id='adventures-section'>
-                    <h2 id='adventures-header'>Recreation Areas Near {userTown}</h2>
+                    <h2 id='adventures-header'>Recreation Areas In {userState}</h2>
                     <div id='homepage-near-you-wrapper'>
                         {
                             recAreaImages.map((recArea) => {

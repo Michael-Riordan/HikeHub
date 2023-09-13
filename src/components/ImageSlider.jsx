@@ -19,11 +19,9 @@ export default function ImageSlider({ images }) {
     return (
                 <>
                     <img 
-                        src={images[currentIndex].url != undefined? images[currentIndex].url : noImageIcon} 
-                        alt={images[currentIndex].altText} 
-                        className='recAreaImage' 
+                        src={images[currentIndex] != undefined? images[currentIndex] : noImageIcon} 
+                        id='rec-area-page-image' 
                     />
-                    <p id='image-title'>{images[currentIndex].title}</p>
                 </>
     );
 }

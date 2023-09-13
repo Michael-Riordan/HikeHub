@@ -10,7 +10,6 @@ export default function AdventureAutocomplete({ onData }) {
     const [currentCount, setCurrentCount] = useState(null);
     const [totalCount, setTotalCount] = useState(null);
     const listboxRef = useRef(null);
-
     const sendDataToParent = () => {
         const data = selectedActivity;
         onData(data);

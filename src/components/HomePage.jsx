@@ -40,7 +40,6 @@ export default function HomePage() {
         //fetches user location based off of users geolocation 
         if (userLocation != null && userState == null) {
             const fetchLocation = async () => {
-                console.log('fetching state');
                 const coordinateQuery = `?coordinates=${encodeURIComponent(JSON.stringify(userLocation))}`
                 const result = await fetch(`http://192.168.0.59:3000/api/geolocation${coordinateQuery}`);
                 const jsonResult = await result.json();
@@ -53,7 +52,7 @@ export default function HomePage() {
             setUserState(sessionStorage.getItem('userState'));
         }
 
-    }, [userLocation]);
+    }, [userLocation, userState]);
 
     useEffect(() => {
         const areas = [];
@@ -66,13 +65,14 @@ export default function HomePage() {
                 areas.push(recArea);
             })
             setRecAreas(areas);
+            sessionStorage.setItem('recAreas', JSON.stringify(areas));
         }
 
         if (userLocation != null) {
             fetchRecAreas();
         }
 
-    }, [userLocation, userState])
+    }, [userLocation, userState]);
 
     useEffect(() => {
         const storedImageData = JSON.parse(sessionStorage.getItem('recAreaImages'));
@@ -98,7 +98,7 @@ export default function HomePage() {
             }
         }
         
-        if (storedImageData.length > 0) {
+        if (storedImageData && storedImageData.length > 0) {
             setAllRecAreaImages(storedAllImagesData)
             setRecAreaImages(storedImageData);
         } else {
@@ -128,15 +128,15 @@ export default function HomePage() {
             fetchNationalParks();
         }
 
-    }, [userState, nationalParksByArea]);
+    }, [userState, dataFetched]);
 
     useEffect(() => {
 
-        //sets sessionStorage on the last modification of image states
+        // sessionStorage set on the last change of dependency array;
         sessionStorage.setItem('recAreaImages', JSON.stringify(recAreaImages));
         sessionStorage.setItem('allRecImages', JSON.stringify(allRecAreaImages));
 
-    }, [allRecAreaImages, recAreaImages])
+    }, [allRecAreaImages, recAreaImages]);
 
     return (
         <section id='homepage-body'>
@@ -179,11 +179,14 @@ export default function HomePage() {
                     <div id='homepage-near-you-wrapper'>
                         {
                             recAreaImages.map((recArea) => {
+                                const storedRecAreas = JSON.parse(sessionStorage.getItem('recAreas'));
                                 return (
                                     <Link id='areaAndImage' 
                                           key={recArea.recAreaID}
                                           to='/RecAreaPage'
-                                          state={{selectedRecArea: recArea.recAreaID, recAreas: recAreas, recAreaImages: allRecAreaImages}}
+                                          state={{selectedRecArea: recArea.recAreaID, 
+                                                  recAreas: storedRecAreas == null ? recAreas : storedRecAreas, 
+                                                  recAreaImages: allRecAreaImages}}
                                     >
                                         <h1 id='rec-area-name'>{recArea.recAreaName}</h1>
                                         <img src={recArea.imageURL} alt='rec area image' className='recAreaImage'/>

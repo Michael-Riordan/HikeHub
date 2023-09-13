@@ -1,0 +1,24 @@
+#rec-area-page-body {
+    display: flex;
+    flex-direction: column;
+}
+
+#rec-area-map {
+    display: flex;
+    height: max-content;
+    justify-content: center;
+}
+
+#rec-area-page-image {
+    width: 50vw;
+    height: 50vh;
+}
+
+.park-page-name {
+    color: white;
+    text-align: center;
+    font-size: 2rem;
+}
+
+
+

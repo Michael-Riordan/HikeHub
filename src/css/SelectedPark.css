@@ -16,9 +16,22 @@
 
 .park-page-name {
     color: white;
-    text-align: center;
     font-size: 2rem;
 }
 
+#park-information {
+    display: flex;
+    width: 100vw;
+}
+
+.park-page-name-and-description-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.park-description {
+    color: white;
+}
 
 

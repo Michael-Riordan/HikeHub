@@ -1,0 +1,13 @@
+#instructions {
+    position: absolute;
+    width: 15%;
+    margin-left: 20%;
+    margin-top: 10%;
+    height: 25%;
+    top: 0;
+    bottom: 20%;
+    padding: 20px;
+    background-color: #fff;
+    overflow-y: scroll;
+    font-family: sans-serif;
+}

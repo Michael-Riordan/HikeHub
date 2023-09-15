@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Map from "./Map";
+import ImageSlider from "./ImageSlider";
 
 export default function RecAreaPage() {
     const location = useLocation();
@@ -11,21 +12,27 @@ export default function RecAreaPage() {
     const [fetchedCoordinates, setFetchedCoordinates] = useState(null);
     const [recAreaGeoJson, setRecAreaGeoJson] = useState([]);
     const [recAreaDescription, setRecAreaDescription] = useState('');
+    const [userLocation, setUserLocation] = useState(null);
     
     useEffect(() => {
 
+        const userCoordinates = location.state.userCoordinates;
+        setUserLocation(userCoordinates);
         //get correct image for selected recArea
+        const URLs = [];
         const recAreas = location.state.recAreas;
         const allRecAreaImages = location.state.recAreaImages;
         const recAreaImages = allRecAreaImages.filter((images) => images.RECDATA[0].EntityID === recAreaID);
-        setSelectedRecAreaImages(recAreaImages);
+        recAreaImages[0].RECDATA.forEach(image => {
+            URLs.push(image.URL);
+        });
+        setSelectedRecAreaImages(URLs);
         const selectedArea = recAreas.filter((area) => area.RecAreaID === recAreaID);
         setSelectedRecArea(selectedArea);
         
         const tempElement = document.createElement('div');
         tempElement.innerHTML = selectedArea[0].RecAreaDescription;
         const cleanRecAreaDescription = tempElement.textContent;
-        console.log(cleanRecAreaDescription);
         setRecAreaDescription(cleanRecAreaDescription);
         
         //some recAreas provide coords as 0,0 if lacking data - in this case code will use fetched coords via address;
@@ -44,7 +51,20 @@ export default function RecAreaPage() {
         }
         setRecAreaGeoJson(lowerCasedCoords);
     }, [recAreaID])
+    
+    useEffect(() => {
+        const facilities = [];
+        
+        const fetchFacilitiesByRecArea = async () => {
+            const response = await fetch(`https://ridb.recreation.gov/api/v1/recareas/${recAreaID}/facilities?limit=50&offset=0&apikey=9bf6a5ef-ff3a-406f-8c75-8663720bc514`)
+            const jsonResponse = await response.json();
+            console.log(jsonResponse);
+        }
 
+        fetchFacilitiesByRecArea();
+    }, []);
+    
+    
     const fetchCoordinatesByAddress = async (recAreaName) => {
         const addressQuery = `?address=${recAreaName}`;
         const result = await fetch(`http://192.168.0.59:3000/api/geocoding${addressQuery}`);
@@ -53,20 +73,20 @@ export default function RecAreaPage() {
         const longitude = jsonResult.results[0].geometry.location.lng;
         setRecAreaCoordinates({longitude: longitude, latitude: latitude});
     }
-
     
     return (
         <>
             {
-                selectedRecArea == null || selectedRecAreaImages == null  || recAreaCoordinates == null ? '' :
+                selectedRecArea == null || selectedRecAreaImages == null  || recAreaCoordinates == null || userLocation == null ? '' :
                 <section id='rec-area-page-body'>
                     <section id='rec-area-map'>
-                        <img src={selectedRecAreaImages[0].RECDATA[0].URL} id='rec-area-page-image'/>
+                        <ImageSlider images={selectedRecAreaImages} />
                         <Map 
                             latitude={recAreaCoordinates.latitude}
                             longitude={recAreaCoordinates.longitude}
                             geojson={recAreaGeoJson}
                             type={'recreationArea'}
+                            userLocation={userLocation}
                         />
                     </section>       
                     <section id='rec-area-info'>

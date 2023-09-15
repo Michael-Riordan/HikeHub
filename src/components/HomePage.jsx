@@ -163,7 +163,10 @@ export default function HomePage() {
                                         id='areaAndImage' 
                                         key={park.fullName}
                                         to='/NatParkPage' 
-                                        state={park}
+                                        state={{
+                                            selectedPark: park,
+                                            userCoordinates: userLocation,
+                                        }}
                                     >
                                         <h1 id='rec-area-name'>{park.fullName}</h1>
                                         <img src={parkImage} alt={`${park.fullName} photo`} className='recAreaImage'/>
@@ -186,7 +189,9 @@ export default function HomePage() {
                                           to='/RecAreaPage'
                                           state={{selectedRecArea: recArea.recAreaID, 
                                                   recAreas: storedRecAreas == null ? recAreas : storedRecAreas, 
-                                                  recAreaImages: allRecAreaImages}}
+                                                  recAreaImages: allRecAreaImages,
+                                                  userCoordinates: userLocation,
+                                                }}
                                     >
                                         <h1 id='rec-area-name'>{recArea.recAreaName}</h1>
                                         <img src={recArea.imageURL} alt='rec area image' className='recAreaImage'/>

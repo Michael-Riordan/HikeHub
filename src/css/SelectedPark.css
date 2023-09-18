@@ -17,6 +17,8 @@
 .park-page-name {
     color: white;
     font-size: 2rem;
+    margin-bottom: 5px;
+    text-align: center;
 }
 
 #park-information {
@@ -24,14 +26,41 @@
     width: 100vw;
 }
 
+#activities-wrapper {
+    list-style-type: none;
+    display: flex;
+    width: 20vw;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    padding: 40px;
+    padding-top: none;
+    justify-content: center;
+    align-self: center;
+}
+
+#activities-header {
+    color: white;
+    font-size: 20px;
+    text-decoration: underline;
+    margin-bottom: 10px;
+}
+
+#activity {
+    color: white;
+}
+
 .park-page-name-and-description-wrapper {
     display: flex;
     flex-direction: column;
-    width: 50%;
 }
 
 .park-description {
+    margin-top: 0;
     color: white;
+    padding: 10vw;
+    padding-top: 0;
+    padding-bottom: 0;
+    text-align: center;
 }
 
 

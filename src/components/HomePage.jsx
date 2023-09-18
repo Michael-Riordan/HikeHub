@@ -5,6 +5,7 @@ import HikingTrail3 from '../assets/Hiking-Trail-3.jpg'
 import NoImageIcon from '../assets/no-image-icon.jpg'
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import HomepageMap from "./Homepage-Map";
 
 export default function HomePage() {
     const [userLocation, setUserLocation] = useState(null);
@@ -12,8 +13,12 @@ export default function HomePage() {
     const [recAreas, setRecAreas] = useState([]);
     const [recAreaImages, setRecAreaImages] = useState([]);
     const [nationalParksByArea, setNationalParksByArea] = useState([]);
+    const [allNationalParks, setAllNationalParks] = useState([]);
     const [allRecAreaImages, setAllRecAreaImages] = useState([]);
     const [dataFetched, setDataFetched] = useState(false);
+    const [totalParks, setTotalParks] = useState(0);
+    const [parkCount, setParkCount] = useState(0);
+    console.log(allNationalParks);
 
     const images = [
         HikingTrail1,
@@ -22,13 +27,18 @@ export default function HomePage() {
     ];
 
     useEffect(() => {
-        if ('geolocation' in navigator) {
+        const storedLocation = JSON.parse(sessionStorage.getItem('userLocation'));
+
+        if (storedLocation != null) {
+            setUserLocation(storedLocation);
+        } else if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 const location = {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                 };
                 setUserLocation(location);
+                sessionStorage.setItem('userLocation', JSON.stringify(location));
             })
         } else {
             console.log('Geolocation not available');
@@ -132,6 +142,22 @@ export default function HomePage() {
 
     useEffect(() => {
 
+        const fetchAllParks = async () => {
+            const results = await fetch (`https://developer.nps.gov/api/v1/parks?api_key=COH2efsrQAeTyn1xGjttOu7lxH7yOatuG7DDQzuz`);
+            const jsonResults = await results.json();
+            setTotalParks(jsonResults.total);
+            setParkCount((prevCount) => prevCount + jsonResults.count);
+            setAllNationalParks((prevResults)=> [...prevResults, jsonResults]);
+        }
+
+        if (parkCount === 0) {
+            fetchAllParks();
+        }
+
+    }, [allNationalParks, parkCount, totalParks]);
+
+    useEffect(() => {
+
         // sessionStorage set on the last change of dependency array;
         sessionStorage.setItem('recAreaImages', JSON.stringify(recAreaImages));
         sessionStorage.setItem('allRecImages', JSON.stringify(allRecAreaImages));
@@ -168,9 +194,8 @@ export default function HomePage() {
                                             userCoordinates: userLocation,
                                         }}
                                     >
-                                        <h1 id='rec-area-name'>{park.fullName}</h1>
                                         <img src={parkImage} alt={`${park.fullName} photo`} className='recAreaImage'/>
-                                        <p id='image-title'>{parkImageTitle}</p>
+                                        <h1 id='rec-area-name'>{park.fullName}</h1>
                                     </Link>
                                 );
                             }) : ''
@@ -193,14 +218,20 @@ export default function HomePage() {
                                                   userCoordinates: userLocation,
                                                 }}
                                     >
-                                        <h1 id='rec-area-name'>{recArea.recAreaName}</h1>
                                         <img src={recArea.imageURL} alt='rec area image' className='recAreaImage'/>
-                                        <p id='image-title'>{recArea.title}</p>
+                                        <h1 id='rec-area-name'>{recArea.recAreaName}</h1>
                                     </Link>
                                 );
                             })
                         }
                     </div>
+                </section>
+                <section>
+                    {   
+                    userLocation != null ?
+                        <HomepageMap coordinates={userLocation}/>
+                    : ''
+                    }
                 </section>
             </section>
         </section>

@@ -13,6 +13,7 @@ export default function NatParkPage() {
 
     useEffect(() => {
 
+        console.log(park);
         const parkCodeQuery = `?parkCode=${park.parkCode}`
         const fetchGeoJSONCoordinates = async () => {
             const response = await fetch(`http://192.168.0.59:3000/api/NationalParkGeoJson${parkCodeQuery}`);
@@ -61,15 +62,18 @@ export default function NatParkPage() {
                     <section className='park-page-name-and-description-wrapper'>
                         <h1 className='park-page-name'>{park.fullName}</h1>  
                         <p className='park-description'>{park.description}</p>
-                    </section>
-                    <section className='park-activities-wrapper'>
-                        {
-                            parkActivities.map((activity) => {
-                                return (
-                                    <div>{activity.name}</div>
-                                );
-                            })
-                        }
+                        <section className='park-activities-section'>
+                            <h1 id='activities-header'>Activities in {park.fullName}</h1>
+                            <ul id='activities-wrapper'>
+                                {
+                                    parkActivities.map((activity) => {
+                                        return (
+                                            <li id='activity' key={activity.name}>{activity.name}</li>
+                                        );
+                                    })
+                                }
+                            </ul>
+                        </section>
                     </section>
                 </section>
             </section>

@@ -143,7 +143,7 @@ export default function HomePage() {
     useEffect(() => {
 
         const fetchAllParks = async () => {
-            const results = await fetch (`https://developer.nps.gov/api/v1/parks?api_key=COH2efsrQAeTyn1xGjttOu7lxH7yOatuG7DDQzuz`);
+            //const results = await fetch (`https://developer.nps.gov/api/v1/parks?apikey`);
             const jsonResults = await results.json();
             setTotalParks(jsonResults.total);
             setParkCount((prevCount) => prevCount + jsonResults.count);

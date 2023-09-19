@@ -3,7 +3,7 @@ import HikingTrail1 from '../assets/Hiking-Trail-1.jpg'
 import HikingTrail2 from '../assets/Hiking-Trail-2.jpg'
 import HikingTrail3 from '../assets/Hiking-Trail-3.jpg'
 import NoImageIcon from '../assets/no-image-icon.jpg'
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import HomepageMap from "./Homepage-Map";
 
@@ -18,7 +18,10 @@ export default function HomePage() {
     const [dataFetched, setDataFetched] = useState(false);
     const [totalParks, setTotalParks] = useState(0);
     const [parkCount, setParkCount] = useState(0);
-    console.log(allNationalParks);
+    const [allParkCoordinates, setAllParkCoordinates] = useState([]);
+
+    //useRef below prevents useEffect with parkCount dependency to fetch all parks with parkCount 0- 
+    const isFirstRender = useRef(true);
 
     const images = [
         HikingTrail1,
@@ -91,11 +94,11 @@ export default function HomePage() {
         //fetches each img related to a rec area specified by id
         const fetchRecAreaImg = async (id, name) => {
             const IdQuery = `?id=${id}`
-            const results = await fetch(`http://192.168.0.59:3000/api/recAreaImg${IdQuery}`)
-            const jsonResults = await results.json();
-            if (jsonResults.RECDATA.length > 0) {
-                const title = jsonResults.RECDATA[0].Title;
-                const imageURL = jsonResults.RECDATA[0].URL;
+            const response = await fetch(`http://192.168.0.59:3000/api/recAreaImg${IdQuery}`)
+            const jsonResponse = await response.json();
+            if (jsonResponse.RECDATA.length > 0) {
+                const title = jsonResponse.RECDATA[0].Title;
+                const imageURL = jsonResponse.RECDATA[0].URL;
                 const recAreaID = id;
                 const titleAndImage = {
                     recAreaName: name,
@@ -103,7 +106,7 @@ export default function HomePage() {
                     imageURL: imageURL,
                     recAreaID: recAreaID,
                 }
-                setAllRecAreaImages((prevImages) => [...prevImages, jsonResults]);
+                setAllRecAreaImages((prevImages) => [...prevImages, jsonResponse]);
                 setRecAreaImages((prevArray) => [...prevArray, titleAndImage]);
             }
         }
@@ -125,10 +128,10 @@ export default function HomePage() {
         //fetches national parks by state code
         const fetchNationalParks = async () => {
             const stateCodeQuery = `?stateCode=${userState}`
-            const results = await fetch (`http://192.168.0.59:3000/api/NationalParks${stateCodeQuery}`);
-            const jsonResults = await results.json();
-            setNationalParksByArea(jsonResults.data);
-            sessionStorage.setItem('nationalParks', JSON.stringify(jsonResults.data));
+            const response = await fetch (`http://192.168.0.59:3000/api/NationalParks${stateCodeQuery}`);
+            const jsonResponse = await response.json();
+            setNationalParksByArea(jsonResponse.data);
+            sessionStorage.setItem('nationalParks', JSON.stringify(jsonResponse.data));
         } 
         
         if (storedData && storedData.length > 0) {
@@ -140,21 +143,45 @@ export default function HomePage() {
 
     }, [userState, dataFetched]);
 
+    const fetchAllParks = async () => {
+        const countQuery = `?startCount=${parkCount}`;
+        const response = await fetch (`http://192.168.0.59:3000/api/AllNationalParks${countQuery}`);
+        const jsonResponse = await response.json();
+        setParkCount((prevCount) => Number(prevCount) + Number(jsonResponse.limit));
+        setTotalParks(Number(jsonResponse.total));
+        setAllNationalParks((prevResponse)=> [...prevResponse, ...jsonResponse.data]);
+    }
+
     useEffect(() => {
+        /*
+            Prevent the initial double call to fetchAllParks:
+            - During the initial render, parkCount is initialized with 0 by useState.
+            - Without the isFirstRender ref, the useEffect would run fetchAllParks
+            twice on initial render with parkCount at 0, resulting in duplicate objects.
+        */
 
-        const fetchAllParks = async () => {
-            //const results = await fetch (`https://developer.nps.gov/api/v1/parks?apikey`);
-            const jsonResults = await results.json();
-            setTotalParks(jsonResults.total);
-            setParkCount((prevCount) => prevCount + jsonResults.count);
-            setAllNationalParks((prevResults)=> [...prevResults, jsonResults]);
+        if (!isFirstRender.current) {
+            if (parkCount < totalParks || totalParks === 0) {
+                console.log('calling');
+                fetchAllParks();
+            }
+        } else {
+            isFirstRender.current = false;
         }
 
-        if (parkCount === 0) {
-            fetchAllParks();
+    }, [parkCount, totalParks]);
+
+    useEffect(() => {
+        const allParkCoords = [];
+        if (allNationalParks.length === totalParks && totalParks !== 0) {
+            allNationalParks.forEach(park => {
+                const parkCoords = {parkName: park.fullName, latitude: park.latitude, longitude: park.longitude}
+                allParkCoords.push(parkCoords);
+            })
+            setAllParkCoordinates(allParkCoords);
         }
 
-    }, [allNationalParks, parkCount, totalParks]);
+    }, [allNationalParks])
 
     useEffect(() => {
 
@@ -228,8 +255,9 @@ export default function HomePage() {
                 </section>
                 <section>
                     {   
-                    userLocation != null ?
-                        <HomepageMap coordinates={userLocation}/>
+                    userLocation != null && allParkCoordinates.length > 0 && allNationalParks.length > 0 ?
+                        <HomepageMap coordinates={{userLocation: userLocation, parkCoordinates: allParkCoordinates}}
+                                     parks={allNationalParks}/>
                     : ''
                     }
                 </section>

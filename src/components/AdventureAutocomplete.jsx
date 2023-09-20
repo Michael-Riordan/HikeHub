@@ -2,60 +2,25 @@ import { Autocomplete } from "@mui/material";
 import { TextField } from "@mui/material";
 import { useEffect, useState, useCallback, useRef } from "react";
 
-export default function AdventureAutocomplete({ onData }) {
+export default function AdventureAutocomplete({ sendActivityToMap }) {
     const [activities, setActivities] = useState([]);
-    const [selectedActivity, setSelectedActivity] = useState('');
+    const [selectedActivity, setSelectedActivity] = useState([]);
     const [selectedActivityID, setSelectedActivityID] = useState(null);
-    const [loadedMore, setLoadedMore] = useState(false);
-    const [currentCount, setCurrentCount] = useState(null);
-    const [totalCount, setTotalCount] = useState(null);
-    const listboxRef = useRef(null);
-    const sendDataToParent = () => {
-        const data = selectedActivity;
-        onData(data);
-    }
 
     const handleAdventureSelect = (event, newValue) => {
         if (newValue) {
             setSelectedActivity(newValue);
             setSelectedActivityID(newValue.activityID);
+
         } else {
             setSelectedActivity('');
             setSelectedActivityID(null);
         }
     }
 
-    const loadMoreActivities = useCallback( async () => {
-        let offset;
-
-        loadedMore ? offset = 100 : offset = 50;
-
-        const additionalActivities = [];
-        const response = await fetch(`http://localhost:3000/api/activities?offset=${offset}`);
-        const jsonResponse = await response.json();
-        jsonResponse.RECDATA.forEach((activity) => {
-            additionalActivities.push({
-                activityName: activity.ActivityName,
-                activityID: activity.ActivityID,
-            })
-        })
-        setCurrentCount((prevCount) => prevCount + jsonResponse.METADATA.RESULTS.CURRENT_COUNT);
-        setActivities((prevActivities) => [...prevActivities, ...additionalActivities]);
-        setLoadedMore(true);
-    });
-
-    const handleScroll = () => {
-        console.log(listboxRef.current, listboxRef.current.scrollTop, listboxRef.current.clientHeight, listboxRef.current.scrollHeight)
-        if (
-            listboxRef.current &&
-            listboxRef.current.scrollTop + listboxRef.current.clientHeight >= 
-            listboxRef.current.scrollHeight
-        ) {
-            if (currentCount == null || currentCount < totalCount) {
-                loadMoreActivities();
-            }
-        }
-    }
+    useEffect(() => {
+        sendActivityToMap(selectedActivity)
+    }, [selectedActivity])
 
     useEffect(() => {
         const activityList = [];
@@ -63,40 +28,31 @@ export default function AdventureAutocomplete({ onData }) {
         const fetchActivities = async () => {
             const response = await fetch('http://192.168.0.59:3000/api/activities');
             const jsonResponse = await response.json();
-            jsonResponse.RECDATA.forEach((activity) => {
+            jsonResponse.data.forEach((activity) => {
                 activityList.push({
-                    activityName: activity.ActivityName,
-                    activityID: activity.ActivityID,
+                    activityName: activity.name,
+                    activityID: activity.id,
                 });
             });
             setActivities(activityList);
-            setCurrentCount(jsonResponse.METADATA.RESULTS.CURRENT_COUNT);
-            setTotalCount(jsonResponse.METADATA.RESULTS.TOTAL_COUNT);
         }
 
         fetchActivities();
     }, []);
 
-    useEffect(() => {
-        sendDataToParent();
-    }, [selectedActivity]);
-
     return <Autocomplete 
+                multiple
                 options={activities}
                 getOptionLabel={(option) => option.activityName}
                 id='Autocomplete' 
-                sx={{width: 400}} 
+                sx={{width: '80%'}} 
                 onChange={handleAdventureSelect}
-                ListboxProps={{
-                    ref: listboxRef,
-                    onScroll: handleScroll,
-                }}
                 renderInput={(params) => 
-                    <TextField {...params} 
-                        label='Scroll for all Adventures' 
-                        color="success" 
+                    <TextField 
+                        {...params} 
+                        label='Filter by Adventures' 
+                        color='success'
                         hiddenLabel={true} 
-                        variant="filled" 
                         id='autocomplete-textfield' 
                     />} 
             />

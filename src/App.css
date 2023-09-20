@@ -8,6 +8,11 @@
   src: url('./assets/DMSerifDisplay-Italic.ttf')
 }
 
+@font-face {
+  font-family: 'DMSerifReg';
+  src: url('./assets/DMSerifDisplay-Regular.ttf');
+}
+
 body {
   margin: 0;
 }

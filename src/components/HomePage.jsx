@@ -6,6 +6,9 @@ import NoImageIcon from '../assets/no-image-icon.jpg'
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import HomepageMap from "./Homepage-Map";
+import StateAutocomplete from "./StateAutocomplete";
+import AdventureAutocomplete from "./AdventureAutocomplete";
+import NationalParkAutocomplete from "./NationalParkAutocomplete";
 
 export default function HomePage() {
     const [userLocation, setUserLocation] = useState(null);
@@ -20,7 +23,7 @@ export default function HomePage() {
     const [parkCount, setParkCount] = useState(0);
     const [allParkCoordinates, setAllParkCoordinates] = useState([]);
 
-    //useRef below prevents useEffect with parkCount dependency to fetch all parks with parkCount 0- 
+    //useRef below prevents useEffect with parkCount dependency to fetch on initial render- 
     const isFirstRender = useRef(true);
 
     const images = [
@@ -145,7 +148,7 @@ export default function HomePage() {
 
     const fetchAllParks = async () => {
         const countQuery = `?startCount=${parkCount}`;
-        const response = await fetch (`http://192.168.0.59:3000/api/AllNationalParks${countQuery}`);
+        const response = await fetch(`http://192.168.0.59:3000/api/AllNationalParks${countQuery}`);
         const jsonResponse = await response.json();
         setParkCount((prevCount) => Number(prevCount) + Number(jsonResponse.limit));
         setTotalParks(Number(jsonResponse.total));
@@ -195,64 +198,7 @@ export default function HomePage() {
         <section id='homepage-body'>
             <SlideShow images={images}/>
             <section id='homepage-info-section'>
-                <h1 id='info-section-header'>Adventures Near You</h1>
-                <section id='national-parks-section'>
-                    <h2 id='adventures-header'>National Parks In {userState}</h2>
-                    <div id='homepage-near-you-wrapper'>
-                        {
-                            nationalParksByArea.length > 0 ?
-                            nationalParksByArea.map((park) => {
-                                let parkImage;
-                                let parkImageTitle;
-                                if (park.images[0] != undefined) {
-                                    parkImage = park.images[0].url;
-                                    parkImageTitle = park.images[0].title;
-                                } else {
-                                    parkImage = NoImageIcon;
-                                    parkImageTitle = `No Image Available for ${park.fullName}`
-                                }
-                                return (
-                                    <Link 
-                                        id='areaAndImage' 
-                                        key={park.fullName}
-                                        to='/NatParkPage' 
-                                        state={{
-                                            selectedPark: park,
-                                            userCoordinates: userLocation,
-                                        }}
-                                    >
-                                        <img src={parkImage} alt={`${park.fullName} photo`} className='recAreaImage'/>
-                                        <h1 id='rec-area-name'>{park.fullName}</h1>
-                                    </Link>
-                                );
-                            }) : ''
-                        }
-                    </div>
-                </section>
-                <section id='adventures-section'>
-                    <h2 id='adventures-header'>Recreation Areas In {userState}</h2>
-                    <div id='homepage-near-you-wrapper'>
-                        {
-                            recAreaImages.map((recArea) => {
-                                const storedRecAreas = JSON.parse(sessionStorage.getItem('recAreas'));
-                                return (
-                                    <Link id='areaAndImage' 
-                                          key={recArea.recAreaID}
-                                          to='/RecAreaPage'
-                                          state={{selectedRecArea: recArea.recAreaID, 
-                                                  recAreas: storedRecAreas == null ? recAreas : storedRecAreas, 
-                                                  recAreaImages: allRecAreaImages,
-                                                  userCoordinates: userLocation,
-                                                }}
-                                    >
-                                        <img src={recArea.imageURL} alt='rec area image' className='recAreaImage'/>
-                                        <h1 id='rec-area-name'>{recArea.recAreaName}</h1>
-                                    </Link>
-                                );
-                            })
-                        }
-                    </div>
-                </section>
+                <h1 id='homepage-info-header'>Discover Your Next Destination</h1>
                 <section>
                     {   
                     userLocation != null && allParkCoordinates.length > 0 && allNationalParks.length > 0 ?

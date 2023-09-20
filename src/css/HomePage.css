@@ -5,6 +5,7 @@
 }
 
 .homepage-header-section {
+    border-top: 2px solid rgb(42, 72, 34);
     display: flex;
     position: relative;
     overflow: hidden;
@@ -32,19 +33,6 @@
     transform: scale(1.1);
 }
 
-#homepage-content {
-    position: absolute;
-    margin-top: 15vh;
-    padding: 20px;
-    margin-bottom: 100px;
-}
-
-#search-prompt {
-    display: flex;
-    height: max-content;
-    justify-content: center;
-}
-
 #homepage-header {
     color:white;
     margin: 0;
@@ -53,82 +41,25 @@
     font-family:"DMSerif";
 }
 
-#homepage-info-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-#info-section-header {
-    font-size: 3rem;
-    color: white;
-    font-family: 'DMSerif';
-    text-align: center;
-}
-
-#adventures-header {
-    color: white;
-    font-family: 'DMSerif';
-    font-size: 2rem;
-    margin-left: 20px;
-    margin-bottom: 0;
-}
-
-#homepage-near-you-wrapper {
-    display: flex;
-    white-space: nowrap;
-    overflow-x: auto;
-    gap: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-#homepage-near-you-wrapper::-webkit-scrollbar {
-    background-color: #00800000;
-}
-
-#homepage-near-you-wrapper::-webkit-scrollbar-thumb {
-    background-color: white;
-    border-radius: 20px;
-}
-
-#areaAndImage {
-    display: flex;
-    border: 2px solid white;
-    background-color: rgb(252, 252, 252);
+/*header page banner */
+#homepage-content {
+    position: absolute;
+    margin-top: 15vh;
     padding: 20px;
-    border-radius: 20px;
-    flex-direction: column;
-    text-align: center;
-    box-shadow: 2px 2px 4px 2px black;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    text-decoration: none;
-    transition: transform 0.3s ease;
-    max-width: 300px;
+    margin-bottom: 100px;
 }
 
-.recAreaImage {
-    align-self: center;
-    border: 1px solid white;
-    width: 300px;
-    height: 250px;
-}
-
-#rec-area-name {
-    color: rgb(42, 72, 34);
-    font-size: 2vw;
-    white-space: pre-wrap;
-    margin-bottom: 2px;
-}
-
-#image-title {
+#homepage-info-header {
+    font-family: "DMSerif";
+    font-weight: 200;
+    margin-left: 20px;
+    font-size: 2.5rem;
+    text-decoration: underline;
     color: rgb(42, 72, 34);
 }
 
-#areaAndImage:hover {
-    transform: translateY(-10px);
-    background-color: rgb(181, 179, 179);
+#homepage-info-section {
+    border-top: 2px solid rgb(42, 72, 34);
 }
 
 @media (orientation: portrait) {

@@ -5,16 +5,13 @@ import { useEffect, useState, useCallback, useRef } from "react";
 export default function AdventureAutocomplete({ sendActivityToMap }) {
     const [activities, setActivities] = useState([]);
     const [selectedActivity, setSelectedActivity] = useState([]);
-    const [selectedActivityID, setSelectedActivityID] = useState(null);
 
     const handleAdventureSelect = (event, newValue) => {
         if (newValue) {
             setSelectedActivity(newValue);
-            setSelectedActivityID(newValue.activityID);
 
         } else {
-            setSelectedActivity('');
-            setSelectedActivityID(null);
+            setSelectedActivity([]);
         }
     }
 

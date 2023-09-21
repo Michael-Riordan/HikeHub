@@ -1,24 +1,35 @@
 import { Autocomplete, TextField } from "@mui/material";
+import { useEffect, useState } from "react";
 
-export default function NationalParkAutocomplete(parks) {
+export default function NationalParkAutocomplete({parks, sendNationalParksToMap }) {
+    const [selectedNationalParks, setSelectedNationalParks] = useState([]);
 
-    const handleSelection = (event) => {
-        console.log(event);
+    const handleParkSelection = (event, newValue) => {
+        if (newValue) {
+            setSelectedNationalParks(newValue);
+        } else {
+            setSelectedNationalParks([]);
+        }
     }
+
+    useEffect(() => {
+        sendNationalParksToMap(selectedNationalParks);
+    }, [selectedNationalParks]);
 
     return <Autocomplete 
                 multiple
-                options={parks.parks}
-                getOptionLabel={(park) => park.fullName}
+                options={parks}
+                getOptionLabel={(parks) => parks.fullName}
                 id='Autocomplete' 
                 sx={{width: '80%'}} 
+                onChange={handleParkSelection}
                 renderInput={(params) => 
                     <TextField 
                     {...params} 
                     label='Search by Park'
                     hiddenLabel={true} 
-                    id='autocomplete-textfield'
-                    onChange={(e) => handleSelection(e)} 
+                    color='success'
+                    id='autocomplete-textfield' 
                     />} 
             />
 }

@@ -80,3 +80,7 @@
 .mapboxgl-popup-close-button:hover {
     background-color: white;
 }
+
+.mapboxgl-popup-close-button:focus {
+    outline: none;
+}

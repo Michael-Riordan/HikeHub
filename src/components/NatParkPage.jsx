@@ -8,13 +8,15 @@ export default function NatParkPage() {
     const [park, setPark] = useState(location.state.selectedPark);
     const [geoJsonCoordinates, setGeoJsonCoordinates] = useState([]);
     const [images, setImages] = useState([]);
-    const [userLocation, setUserLocation] = useState(location.state.userCoordinates);
+    const [userLocation, setUserLocation] = useState(location.state.userLocation);
     const [parkActivities, setParkActivities] = useState([]);
+    console.log(park, userLocation);
 
     useEffect(() => {
 
-        console.log(park);
-        const parkCodeQuery = `?parkCode=${park.parkCode}`
+        console.log(park[0].parkCode);
+        const parkCode = park[0].parkCode;
+        const parkCodeQuery = `?parkCode=${parkCode}`
         const fetchGeoJSONCoordinates = async () => {
             const response = await fetch(`http://192.168.0.59:3000/api/NationalParkGeoJson${parkCodeQuery}`);
             const jsonResponse = await response.json();
@@ -28,13 +30,13 @@ export default function NatParkPage() {
 
     useEffect(() => {
         const urls = [];
-        const parkImages = park.images;
+        const parkImages = park[0].images;
         parkImages.forEach(image => {
             urls.push(image.url);
         });
 
         const activities = [];
-        park.activities.forEach((activity) => {
+        park[0].activities.forEach((activity) => {
             activities.push(activity);
         })
         setParkActivities(activities);
@@ -51,8 +53,8 @@ export default function NatParkPage() {
                 <section id='rec-area-map'>
                         <ImageSlider images={images}/>
                             <Map 
-                                latitude={park.latitude}
-                                longitude={park.longitude}
+                                latitude={park[0].latitude}
+                                longitude={park[0].longitude}
                                 geojson={geoJsonCoordinates}
                                 type={'nationalPark'}
                                 userLocation={userLocation}
@@ -60,10 +62,10 @@ export default function NatParkPage() {
                 </section> 
                 <section id='park-information'>
                     <section className='park-page-name-and-description-wrapper'>
-                        <h1 className='park-page-name'>{park.fullName}</h1>  
-                        <p className='park-description'>{park.description}</p>
+                        <h1 className='park-page-name'>{park[0].fullName}</h1>  
+                        <p className='park-description'>{park[0].description}</p>
                         <section className='park-activities-section'>
-                            <h1 id='activities-header'>Activities in {park.fullName}</h1>
+                            <h1 id='activities-header'>Activities in {park[0].fullName}</h1>
                             <ul id='activities-wrapper'>
                                 {
                                     parkActivities.map((activity) => {

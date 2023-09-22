@@ -15,10 +15,12 @@
 }
 
 .park-page-name {
-    color: white;
+    color: rgb(42, 72, 34);
     font-size: 2rem;
-    margin-bottom: 5px;
-    text-align: center;
+    margin: 20px;
+    margin-bottom: 0;
+    text-align: left;
+    text-decoration: underline;
 }
 
 #park-information {
@@ -39,14 +41,14 @@
 }
 
 #activities-header {
-    color: white;
+    color: rgb(42, 72, 34);
     font-size: 20px;
     text-decoration: underline;
     margin-bottom: 10px;
 }
 
 #activity {
-    color: white;
+    color: rgb(42, 72, 34);
 }
 
 .park-page-name-and-description-wrapper {
@@ -55,12 +57,10 @@
 }
 
 .park-description {
-    margin-top: 0;
-    color: white;
-    padding: 10vw;
-    padding-top: 0;
-    padding-bottom: 0;
-    text-align: center;
+    margin: 20px;
+    text-indent: 10px;
+    color: rgb(42, 72, 34);
+    text-align: left;
 }
 
 

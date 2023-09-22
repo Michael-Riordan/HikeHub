@@ -199,13 +199,19 @@ export default function HomePage() {
             <SlideShow images={images}/>
             <section id='homepage-info-section'>
                 <h1 id='homepage-info-header'>Discover Your Next Destination</h1>
-                <section>
-                    {   
+                <section id='map-section'>
+                    { 
                     userLocation != null && allParkCoordinates.length > 0 && allNationalParks.length > 0 ?
-                        <HomepageMap coordinates={{userLocation: userLocation, parkCoordinates: allParkCoordinates}}
-                                     parks={allNationalParks}/>
-                    : ''
+                        <HomepageMap 
+                            coordinates={{userLocation: userLocation, parkCoordinates: allParkCoordinates}}
+                            parks={allNationalParks}
+                        />
+                        :
+                        <div className='loading-circle'>
+                            <div className='circle-inner' />
+                        </div>
                     }
+                    
                 </section>
             </section>
         </section>

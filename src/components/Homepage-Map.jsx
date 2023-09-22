@@ -5,17 +5,20 @@ import noImageIcon from '../assets/no-image-icon.jpg';
 import AdventureAutocomplete from "./AdventureAutocomplete";
 import StateAutocomplete from "./StateAutocomplete";
 import NationalParkAutocomplete from "./NationalParkAutocomplete";
+import { Link } from "react-router-dom";
 
 export default function HomepageMap({coordinates, parks}) {
     const [allParkCoordinates, setAllParkCoordinates] = useState(coordinates.parkCoordinates);
     const [allParks, setAllParks] = useState(parks);
     const [viewport, setViewport] = useState({
-        latitude: coordinates.userLocation.latitude,
-        longitude: coordinates.userLocation.longitude,
-        zoom: 6,
+        latitude: 39.8283,
+        longitude: -98.5795,
+        zoom: 3.5,
     });
+    const [userLocation, setUserLocation] = useState(null);
     const [selectedMarker, setSelectedMarker] = useState(null);
     const [selectedParkImage, setSelectedParkImage] = useState(null);
+    const [selectedPark, setSelectedPark] = useState(null);
     const [selectedActivities, setSelectedActivities] = useState([]);
     const [filteredParkCoordinates, setFilteredParkCoordinates] = useState(coordinates.parkCoordinates);
     const [filteredParks, setFilteredParks] = useState(parks);
@@ -50,139 +53,166 @@ export default function HomepageMap({coordinates, parks}) {
         return filteredCoords;
     }
 
-    //future code for refactoring.
-    /*const filteredParks = (filtered, filter) => {
-        filtered.forEach((item) => {
-            filter.forEach((filter) => {
-                if (item.)
+
+    const filterParks = (arr, filterArr) => {
+        const filteredItems = [];
+        arr.forEach((item) => {
+            filterArr.forEach((filter) => {
+                if (item.fullName === filter.fullName) {
+                    filteredItems.push(item);
+                }
             })
         })
+        return filteredItems;
     }
-    */
 
     useEffect(() => {
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                const location = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                };
+                setUserLocation(location);
+            })
+        } else {
+            console.log('Geolocation not available');
+        }
+    }, []);
+
+    useEffect(() => {
+        //sets image of marker Popup component on user selection
         if (selectedMarker) {
+
             const selectedPark = allParks.filter((park) => park.fullName === selectedMarker.parkName);
             selectedPark[0].images.length > 0 ?
             setSelectedParkImage(selectedPark[0].images[0].url) :
             setSelectedParkImage(noImageIcon);
+            setSelectedPark(selectedPark);
+
         }
     }, [selectedMarker])
 
     useEffect(() => {
-        //filters out the parks that do not have all elements of selected activities in their respective activity array.
+        //filters out parks that do not have every user selected activity in their respective activity array.
 
         if (selectedActivities.length > 0) {
+
             const filteredParksByActivities = allParks.filter((park) => {
+
                 const parkActivityNames = park.activities.map((activity) => activity.name);
                 return selectedActivities.every((activity) => parkActivityNames.includes(activity.activityName));
+
             });
 
             setParksByActivities(filteredParksByActivities);
+
         } else {
+
             setParksByActivities([]);
+
         }
     }, [selectedActivities]);
 
     useEffect(() => {
+        //filters parks that don't include user selected state in the parks 'states' array
         if (selectedState.length > 0) {
-            const filteredParksByState = allParks.filter((park) => {
-                return selectedState.every((state) => park.states.includes(state));
-            });
+
+            const filteredParksByState = [];
+            allParks.forEach(park => {
+                selectedState.forEach(state => {
+                    if (park.states.includes(state) && !filteredParksByState.includes(park)) {
+                        filteredParksByState.push(park);
+                    }
+                })
+            })
+
+            console.log(filteredParksByState);
             setParksByState(filteredParksByState);
+
         } else {
+
             setParksByState([]);
+
         }
     }, [selectedState]);
 
     useEffect(() => {
+        //filters parks which do not match the string park.fullName
         if (selectedNationalParks.length > 0) {
-            const parkByName = [];
-            allParks.forEach((park) => {
-                selectedNationalParks.forEach((selectedPark) => {
-                    if (park.fullName === selectedPark.fullName) {
-                        parkByName.push(park);
-                    }
-                })
-            })
+
+            const parkByName = filterParks(allParks, selectedNationalParks);
             setParksBySelectedPark(parkByName);
+
         } else {
+
             setParksBySelectedPark(allParks);
+
         }
     }, [selectedNationalParks])
 
     useEffect(() => {
         if (parksByActivities.length > 0 && parksByState.length > 0 ) {
-            const filteredParksByActivitiesAndState = [];
-            parksByActivities.forEach(park => {
-                parksByState.forEach(state => {
-                    if (park.fullName === state.fullName) {
-                        filteredParksByActivitiesAndState.push(park);
-                    }
-                })
-            })
+
+            const filteredParksByActivitiesAndState = filterParks(parksByActivities, parksByState);
+
             if (selectedNationalParks.length === 0) {
-                const filteredCoordsByFilteredParks = filterCoords(filteredParksByActivitiesAndState, allParkCoordinates);
+
+                const filteredParksCoordinates = filterCoords(filteredParksByActivitiesAndState, allParkCoordinates);
                 setFilteredParks(filteredParksByActivitiesAndState);
-                setFilteredParkCoordinates(filteredCoordsByFilteredParks);
+                setFilteredParkCoordinates(filteredParksCoordinates);
+
             } else {
-                const selectedParksWithFilters = [];
-                filteredParksByActivitiesAndState.forEach(park => {
-                    parksBySelectedPark.forEach(selection => {
-                        if (park.fullName === selection.fullName) {
-                            selectedParksWithFilters.push(park);
-                        }
-                    })
-                })
+
+                const selectedParksWithFilters = filterParks(filteredParksByActivitiesAndState, parksBySelectedPark);
                 const selectedParkWithFiltersCoords = filterCoords(selectedParksWithFilters, allParkCoordinates);
                 setFilteredParkCoordinates(selectedParkWithFiltersCoords);
                 setFilteredParks(selectedParksWithFilters);
+
             }
         } else if (parksByState.length > 0) {
             if (selectedNationalParks.length === 0) {
+
                 const filteredCoordsByState = filterCoords(parksByState, allParkCoordinates);
                 setFilteredParkCoordinates(filteredCoordsByState);
                 setFilteredParks(parksByState);
+
             } else {
-                const selectedParksWithStateFilter = [];
-                parksByState.forEach(park => {
-                    parksBySelectedPark.forEach(selection => {
-                        if (park.fullName === selection.fullName) {
-                            selectedParksWithStateFilter.push(park);
-                        }
-                    })
-                })
+
+                const selectedParksWithStateFilter = filterParks(parksByState, parksBySelectedPark);
                 const selectedParkWithStateFilterCoords = filterCoords(selectedParksWithStateFilter, allParkCoordinates);
                 setFilteredParkCoordinates(selectedParkWithStateFilterCoords);
                 setFilteredParks(selectedParksWithStateFilter);
+
             }
 
         } else if (parksByActivities.length > 0) {
             if (selectedNationalParks.length === 0) {
+
                 const filteredCoordsByActivities = filterCoords(parksByActivities, allParkCoordinates);
                 setFilteredParkCoordinates(filteredCoordsByActivities);
-                setFilteredParks(parksByActivities);  
+                setFilteredParks(parksByActivities); 
+
             } else {
-                const selectedParksWithActivityFilter = [];
-                parksByActivities.forEach(park => {
-                    parksBySelectedPark.forEach(selection => {
-                        if (park.fullName === selection.fullName) {
-                            selectedParksWithActivityFilter.push(park);
-                        }
-                    })
-                })
+
+                const selectedParksWithActivityFilter = filterParks(parksByActivities, parksBySelectedPark);
                 const selectedParksWithActivityFilterCoords = filterCoords(selectedParksWithActivityFilter, allParkCoordinates);
                 setFilteredParkCoordinates(selectedParksWithActivityFilterCoords);
                 setFilteredParks(selectedParksWithActivityFilter);
+
             }
         } else {
             if (selectedNationalParks.length === 0) {
+
                 setFilteredParkCoordinates(allParkCoordinates);
                 setFilteredParks(parksBySelectedPark);
+
             } else {
+
                 const selectedParksNoFilters = filterCoords(parksBySelectedPark, filteredParkCoordinates);
                 setFilteredParks(parksBySelectedPark);
                 setFilteredParkCoordinates(selectedParksNoFilters);
+
             }
         }
     }, [parksByState, parksByActivities, parksBySelectedPark]);
@@ -256,6 +286,7 @@ export default function HomepageMap({coordinates, parks}) {
                             <div id='popup-div'>
                                 <img id='popup-park-image' src={selectedParkImage} />
                                 <h3 id='popup-park-name'>{selectedMarker.parkName}</h3>
+                                <Link to='/NatParkPage' state={{selectedPark: selectedPark, userLocation: userLocation}}>Read More</Link>
                             </div>
                         </Popup>
                 )}

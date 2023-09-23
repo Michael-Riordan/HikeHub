@@ -2,13 +2,8 @@ import SlideShow from "./SlideShow";
 import HikingTrail1 from '../assets/Hiking-Trail-1.jpg'
 import HikingTrail2 from '../assets/Hiking-Trail-2.jpg'
 import HikingTrail3 from '../assets/Hiking-Trail-3.jpg'
-import NoImageIcon from '../assets/no-image-icon.jpg'
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import HomepageMap from "./Homepage-Map";
-import StateAutocomplete from "./StateAutocomplete";
-import AdventureAutocomplete from "./AdventureAutocomplete";
-import NationalParkAutocomplete from "./NationalParkAutocomplete";
 
 export default function HomePage() {
     const [userLocation, setUserLocation] = useState(null);
@@ -22,6 +17,7 @@ export default function HomePage() {
     const [totalParks, setTotalParks] = useState(0);
     const [parkCount, setParkCount] = useState(0);
     const [allParkCoordinates, setAllParkCoordinates] = useState([]);
+    const [allParkImages, setAllParkImages] = useState([]);
 
     //useRef below prevents useEffect with parkCount dependency to fetch on initial render- 
     const isFirstRender = useRef(true);
@@ -70,6 +66,7 @@ export default function HomePage() {
 
     }, [userLocation, userState]);
 
+    /*
     useEffect(() => {
         const areas = [];
 
@@ -89,8 +86,9 @@ export default function HomePage() {
         }
 
     }, [userLocation, userState]);
+    */
 
-    useEffect(() => {
+    /*useEffect(() => {
         const storedImageData = JSON.parse(sessionStorage.getItem('recAreaImages'));
         const storedAllImagesData = JSON.parse(sessionStorage.getItem('allRecImages'));
 
@@ -124,9 +122,10 @@ export default function HomePage() {
             }) 
         }
     }, [recAreas]);
+    */
 
     useEffect(() => {
-        const storedData = JSON.parse(sessionStorage.getItem('nationalParks'));
+        const storedNationalParkData = JSON.parse(sessionStorage.getItem('nationalParks'));
         
         //fetches national parks by state code
         const fetchNationalParks = async () => {
@@ -137,8 +136,8 @@ export default function HomePage() {
             sessionStorage.setItem('nationalParks', JSON.stringify(jsonResponse.data));
         } 
         
-        if (storedData && storedData.length > 0) {
-            setNationalParksByArea(storedData);
+        if (storedNationalParkData && storedNationalParkData.length > 0) {
+            setNationalParksByArea(storedNationalParkData);
             setDataFetched(true);
         } else if (!dataFetched) {
             fetchNationalParks();
@@ -147,13 +146,40 @@ export default function HomePage() {
     }, [userState, dataFetched]);
 
     const fetchAllParks = async () => {
+
         const countQuery = `?startCount=${parkCount}`;
         const response = await fetch(`http://192.168.0.59:3000/api/AllNationalParks${countQuery}`);
         const jsonResponse = await response.json();
         setParkCount((prevCount) => Number(prevCount) + Number(jsonResponse.limit));
         setTotalParks(Number(jsonResponse.total));
         setAllNationalParks((prevResponse)=> [...prevResponse, ...jsonResponse.data]);
+
     }
+
+    useEffect(() => {
+        const cachedImageURLs = sessionStorage.getItem('parkImageURLs');
+        
+        if (cachedImageURLs) {
+
+            const parsedImagesCache = JSON.parse(cachedImageURLs);
+            setAllParkImages(parsedImagesCache);
+
+        } else {
+
+            const parkImageURLs = [];
+            if (parkCount > totalParks) {
+                allNationalParks.forEach((park) => {
+                    const parkName = park.fullName;
+                    const parkImagesArr = park.images;
+                    parkImageURLs.push({name: parkName, images: parkImagesArr })
+                });
+                
+                setAllParkImages(parkImageURLs);
+                sessionStorage.setItem('parkImageURLs', JSON.stringify(parkImageURLs));
+            }
+
+        }
+    }, [allNationalParks]);
 
     useEffect(() => {
         /*
@@ -163,36 +189,69 @@ export default function HomePage() {
             twice on initial render with parkCount at 0, resulting in duplicate objects.
         */
 
-        if (!isFirstRender.current) {
-            if (parkCount < totalParks || totalParks === 0) {
-                console.log('calling');
-                fetchAllParks();
-            }
+        const cachedAllParks = sessionStorage.getItem('allParks');
+
+        if (cachedAllParks && JSON.parse(cachedAllParks).length > 0) {
+
+            const parsedAllParks = JSON.parse(cachedAllParks);
+            setAllNationalParks(parsedAllParks)
+
         } else {
-            isFirstRender.current = false;
+            if (!isFirstRender.current) {
+                if (parkCount < totalParks || totalParks === 0) {
+                    console.log('calling');
+                    fetchAllParks();
+                }
+            } else {
+                isFirstRender.current = false;
+            }
         }
+
 
     }, [parkCount, totalParks]);
 
     useEffect(() => {
-        const allParkCoords = [];
-        if (allNationalParks.length === totalParks && totalParks !== 0) {
-            allNationalParks.forEach(park => {
-                const parkCoords = {parkName: park.fullName, latitude: park.latitude, longitude: park.longitude}
-                allParkCoords.push(parkCoords);
-            })
-            setAllParkCoordinates(allParkCoords);
+        const allParkCoordsCache = sessionStorage.getItem('allParkCoords');
+
+        if (allParkCoordsCache) {
+            const parsedParkCoordsCache = JSON.parse(allParkCoordsCache);
+            setAllParkCoordinates(parsedParkCoordsCache);
+        } else {
+
+            const allParkCoords = [];
+            if (allNationalParks.length === totalParks && totalParks !== 0) {
+                allNationalParks.forEach(park => {
+                    const parkCoords = {parkName: park.fullName, latitude: park.latitude, longitude: park.longitude}
+                    allParkCoords.push(parkCoords);
+                })
+
+                setAllParkCoordinates(allParkCoords);
+                sessionStorage.setItem('allParkCoords', JSON.stringify(allParkCoords));
+
+            }
+
         }
 
-    }, [allNationalParks])
+    }, [allNationalParks]);
 
     useEffect(() => {
+
+        if (parkCount > totalParks) {
+
+            sessionStorage.setItem('allParks', JSON.stringify(allNationalParks));
+
+        }
+
+    }, [parkCount, totalParks]);
+
+    /*useEffect(() => {
 
         // sessionStorage set on the last change of dependency array;
         sessionStorage.setItem('recAreaImages', JSON.stringify(recAreaImages));
         sessionStorage.setItem('allRecImages', JSON.stringify(allRecAreaImages));
 
     }, [allRecAreaImages, recAreaImages]);
+    */
 
     return (
         <section id='homepage-body'>
@@ -201,10 +260,11 @@ export default function HomePage() {
                 <h1 id='homepage-info-header'>Discover Your Next Destination</h1>
                 <section id='map-section'>
                     { 
-                    userLocation != null && allParkCoordinates.length > 0 && allNationalParks.length > 0 ?
+                    userLocation != null && allParkCoordinates.length > 0 && allNationalParks.length > 0 && allParkImages.length > 0?
                         <HomepageMap 
                             coordinates={{userLocation: userLocation, parkCoordinates: allParkCoordinates}}
                             parks={allNationalParks}
+                            images={allParkImages}
                         />
                         :
                         <div className='loading-circle'>

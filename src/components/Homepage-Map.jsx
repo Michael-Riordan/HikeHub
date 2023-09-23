@@ -7,7 +7,7 @@ import StateAutocomplete from "./StateAutocomplete";
 import NationalParkAutocomplete from "./NationalParkAutocomplete";
 import { Link } from "react-router-dom";
 
-export default function HomepageMap({coordinates, parks}) {
+export default function HomepageMap({coordinates, parks, images}) {
     const [allParkCoordinates, setAllParkCoordinates] = useState(coordinates.parkCoordinates);
     const [allParks, setAllParks] = useState(parks);
     const [viewport, setViewport] = useState({
@@ -49,7 +49,6 @@ export default function HomepageMap({coordinates, parks}) {
                 }
             })
         })
-        console.log(filteredCoords);
         return filteredCoords;
     }
 
@@ -83,10 +82,12 @@ export default function HomepageMap({coordinates, parks}) {
     useEffect(() => {
         //sets image of marker Popup component on user selection
         if (selectedMarker) {
-
             const selectedPark = allParks.filter((park) => park.fullName === selectedMarker.parkName);
-            selectedPark[0].images.length > 0 ?
-            setSelectedParkImage(selectedPark[0].images[0].url) :
+            const selectedParkImage = images.filter((image) => image.name === selectedMarker.parkName);
+            console.log(selectedParkImage[0].images);
+
+            selectedParkImage[0].images.length > 0 ?
+            setSelectedParkImage(selectedParkImage[0].images[0].url) :
             setSelectedParkImage(noImageIcon);
             setSelectedPark(selectedPark);
 

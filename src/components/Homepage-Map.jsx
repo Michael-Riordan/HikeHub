@@ -13,9 +13,9 @@ export default function HomepageMap({coordinates, parks, images}) {
     const [viewport, setViewport] = useState({
         latitude: 39.8283,
         longitude: -98.5795,
-        zoom: 3.5,
+        zoom: 2.5,
     });
-    const [userLocation, setUserLocation] = useState(null);
+    const [userLocation, setUserLocation] = useState(coordinates.userLocation);
     const [selectedMarker, setSelectedMarker] = useState(null);
     const [selectedParkImage, setSelectedParkImage] = useState(null);
     const [selectedPark, setSelectedPark] = useState(null);
@@ -66,30 +66,16 @@ export default function HomepageMap({coordinates, parks, images}) {
     }
 
     useEffect(() => {
-        if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                const location = {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                };
-                setUserLocation(location);
-            })
-        } else {
-            console.log('Geolocation not available');
-        }
-    }, []);
-
-    useEffect(() => {
         //sets image of marker Popup component on user selection
         if (selectedMarker) {
-            const selectedPark = allParks.filter((park) => park.fullName === selectedMarker.parkName);
-            const selectedParkImage = images.filter((image) => image.name === selectedMarker.parkName);
-            console.log(selectedParkImage[0].images);
 
-            selectedParkImage[0].images.length > 0 ?
-            setSelectedParkImage(selectedParkImage[0].images[0].url) :
-            setSelectedParkImage(noImageIcon);
+            const selectedPark = allParks.filter((park) => park.fullName === selectedMarker.parkName);
             setSelectedPark(selectedPark);
+            setViewport({
+                            latitude: Number(selectedMarker.latitude), 
+                            longitude: Number(selectedMarker.longitude),
+                            zoom: 3.5
+                        });
 
         }
     }, [selectedMarker])
@@ -243,10 +229,11 @@ export default function HomepageMap({coordinates, parks, images}) {
                 </div>
             </div>
             <Map
-                mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
                 initialViewState={viewport}
+                mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
                 style={{width: '100%', height: '600px',}}
                 mapStyle={'mapbox://styles/michaeljriordan/clmf3bjbc015j01r63fxg8ezj'}
+                
             >
                 {
                     filteredParkCoordinates.map((coords) => {
@@ -285,7 +272,7 @@ export default function HomepageMap({coordinates, parks, images}) {
                             closeOnClick={false}
                         >
                             <div id='popup-div'>
-                                <img id='popup-park-image' src={selectedParkImage} />
+                                <img id='popup-park-image' src={selectedMarker.parkImage} />
                                 <h3 id='popup-park-name'>{selectedMarker.parkName}</h3>
                                 <Link to='/NatParkPage' state={{selectedPark: selectedPark, userLocation: userLocation}}>Read More</Link>
                             </div>

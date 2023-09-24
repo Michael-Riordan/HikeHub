@@ -17,7 +17,6 @@ export default function HomePage() {
     const [totalParks, setTotalParks] = useState(0);
     const [parkCount, setParkCount] = useState(0);
     const [allParkCoordinates, setAllParkCoordinates] = useState([]);
-    const [allParkImages, setAllParkImages] = useState([]);
 
     //useRef below prevents useEffect with parkCount dependency to fetch on initial render- 
     const isFirstRender = useRef(true);
@@ -157,31 +156,6 @@ export default function HomePage() {
     }
 
     useEffect(() => {
-        const cachedImageURLs = sessionStorage.getItem('parkImageURLs');
-        
-        if (cachedImageURLs) {
-
-            const parsedImagesCache = JSON.parse(cachedImageURLs);
-            setAllParkImages(parsedImagesCache);
-
-        } else {
-
-            const parkImageURLs = [];
-            if (parkCount > totalParks) {
-                allNationalParks.forEach((park) => {
-                    const parkName = park.fullName;
-                    const parkImagesArr = park.images;
-                    parkImageURLs.push({name: parkName, images: parkImagesArr })
-                });
-                
-                setAllParkImages(parkImageURLs);
-                sessionStorage.setItem('parkImageURLs', JSON.stringify(parkImageURLs));
-            }
-
-        }
-    }, [allNationalParks]);
-
-    useEffect(() => {
         /*
             Prevent the initial double call to fetchAllParks:
             - During the initial render, parkCount is initialized with 0 by useState.
@@ -220,8 +194,13 @@ export default function HomePage() {
 
             const allParkCoords = [];
             if (allNationalParks.length === totalParks && totalParks !== 0) {
+                let parkURL;
                 allNationalParks.forEach(park => {
-                    const parkCoords = {parkName: park.fullName, latitude: park.latitude, longitude: park.longitude}
+                    if (park.images.length > 0) {
+                        parkURL = park.images[0].url;
+                        console.log(parkURL);
+                    }
+                    const parkCoords = {parkName: park.fullName, latitude: park.latitude, longitude: park.longitude, parkImage: parkURL,}
                     allParkCoords.push(parkCoords);
                 })
 
@@ -260,11 +239,10 @@ export default function HomePage() {
                 <h1 id='homepage-info-header'>Discover Your Next Destination</h1>
                 <section id='map-section'>
                     { 
-                    userLocation != null && allParkCoordinates.length > 0 && allNationalParks.length > 0 && allParkImages.length > 0?
+                    userLocation != null && allParkCoordinates.length > 0 && allNationalParks.length > 0 ?
                         <HomepageMap 
                             coordinates={{userLocation: userLocation, parkCoordinates: allParkCoordinates}}
                             parks={allNationalParks}
-                            images={allParkImages}
                         />
                         :
                         <div className='loading-circle'>

@@ -14,7 +14,6 @@ export default function NatParkPage() {
 
     useEffect(() => {
 
-        console.log(park[0].parkCode);
         const parkCode = park[0].parkCode;
         const parkCodeQuery = `?parkCode=${parkCode}`
         const fetchGeoJSONCoordinates = async () => {
@@ -36,6 +35,7 @@ export default function NatParkPage() {
         });
 
         const activities = [];
+        console.log(park[0]);
         park[0].activities.forEach((activity) => {
             activities.push(activity);
         })
@@ -70,7 +70,10 @@ export default function NatParkPage() {
                                 {
                                     parkActivities.map((activity) => {
                                         return (
-                                            <li id='activity' key={activity.name}>{activity.name}</li>
+                                            <div id='activity' key={activity.name}>
+                                                {activity.name}
+                                                
+                                            </div>
                                         );
                                     })
                                 }

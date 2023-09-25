@@ -219,10 +219,12 @@ export default function HomepageMap({coordinates, parks, images}) {
                             let image;
                             park.images.length > 0 ? image = park.images[0].url : image = noImageIcon;
                             return (
-                                <div id='park-and-info'>
-                                    <img id='park-image' src={image} />
-                                    <h2 id='park-name'>{park.fullName}</h2>
-                                </div>
+                                <>
+                                    <Link id='park-and-info' to='/NatParkPage' state={{selectedPark: [park], userLocation: userLocation}}>
+                                        <img id='park-image' src={image} />
+                                        <h2 id='park-name'>{park.fullName}</h2>
+                                    </Link>
+                                </>
                             );
                         })
                     }

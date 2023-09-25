@@ -21,6 +21,7 @@
 #list {
     display: flex;
     flex-direction: column;
+    gap: 10px;
     align-items: center;
     width: 100%;
     height: 376px;
@@ -32,8 +33,14 @@
     display: flex;
     align-items: center;
     width: 90%;
-    margin-top: 10px;
+    border-radius: 20px;
     border-bottom: 1px solid grey;
+    border-right: 1px solid grey;
+    text-decoration: none;
+}
+
+#park-and-info:hover {
+    background-color: rgb(128, 193, 151);
 }
 
 #park-name {
@@ -49,7 +56,6 @@
     height: 100px;
     justify-self: center;
     border-radius: 10px;
-    margin-bottom: 10px;
 }
 
 #popup-div {

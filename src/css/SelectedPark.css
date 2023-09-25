@@ -21,18 +21,20 @@
     margin-bottom: 0;
     text-align: left;
     text-decoration: underline;
+    font-family: 'DMSerifReg';
 }
 
 #park-information {
     display: flex;
     width: 100vw;
+    font-family: 'DMSerifReg';
 }
 
 #activities-wrapper {
     list-style-type: none;
     display: flex;
-    width: 20vw;
-    justify-content: space-evenly;
+    flex-direction: row;
+    gap: 20px;
     flex-wrap: wrap;
     padding: 40px;
     padding-top: none;
@@ -45,10 +47,12 @@
     font-size: 20px;
     text-decoration: underline;
     margin-bottom: 10px;
+    font-family: 'DMSerifReg';
 }
 
 #activity {
     color: rgb(42, 72, 34);
+    font-family: 'DMSerifReg';
 }
 
 .park-page-name-and-description-wrapper {

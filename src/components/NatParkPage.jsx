@@ -10,7 +10,7 @@ export default function NatParkPage() {
     const [images, setImages] = useState([]);
     const [userLocation, setUserLocation] = useState(location.state.userLocation);
     const [parkActivities, setParkActivities] = useState([]);
-    console.log(park, userLocation);
+    const [thingsToDo, setThingsToDo] = useState([]);
 
     useEffect(() => {
 
@@ -35,7 +35,6 @@ export default function NatParkPage() {
         });
 
         const activities = [];
-        console.log(park[0]);
         park[0].activities.forEach((activity) => {
             activities.push(activity);
         })
@@ -44,6 +43,20 @@ export default function NatParkPage() {
         setImages(urls);
 
     }, [park]);
+
+    useEffect(() => {
+        const parkCode = park[0].parkCode;
+        const parkCodeQuery = `?parkCode=${parkCode}`;
+
+        const fetchThingsToDo = async () => {
+            const response = await fetch(`http://192.168.0.59:3000/api/NatParkThingsToDo${parkCodeQuery}`);
+            const jsonResponse = await response.json();
+            console.log(jsonResponse)
+            setThingsToDo(jsonResponse);
+        }
+
+        fetchThingsToDo();
+    }, []);
 
     return (
         <>

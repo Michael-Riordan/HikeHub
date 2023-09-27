@@ -11,7 +11,8 @@ export default function NatParkPage() {
     const [userLocation, setUserLocation] = useState(location.state.userLocation);
     const [parkActivities, setParkActivities] = useState([]);
     const [thingsToDo, setThingsToDo] = useState([]);
-
+    const [fetchingThingsToDo, setFetchingThingsToDo] = useState(true);
+    const [groupedActivities, setGroupedActivities] = useState(null);
     useEffect(() => {
 
         const parkCode = park[0].parkCode;
@@ -47,16 +48,31 @@ export default function NatParkPage() {
     useEffect(() => {
         const parkCode = park[0].parkCode;
         const parkCodeQuery = `?parkCode=${parkCode}`;
+        let activitiesObject = {};
 
         const fetchThingsToDo = async () => {
             const response = await fetch(`http://192.168.0.59:3000/api/NatParkThingsToDo${parkCodeQuery}`);
             const jsonResponse = await response.json();
-            console.log(jsonResponse)
             setThingsToDo(jsonResponse);
-        }
+            jsonResponse.data.forEach(activity => {
+                const activityType = activity.activities[0].name;
+                const activityTitle = activity.title;
+                const activityDescription = activity.shortDescription;
+                const activityImage = activity.images[0].url;
 
+                if (!activitiesObject[activityType]) {
+                    activitiesObject[activityType] = [];
+                }
+
+                activitiesObject[activityType].push({name: activityTitle, description: activityDescription, image: activityImage});
+            })
+
+            setGroupedActivities(activitiesObject);
+        }
+        
         fetchThingsToDo();
-    }, []);
+        setFetchingThingsToDo(false);
+    }, [park]);
 
     return (
         <>
@@ -81,14 +97,17 @@ export default function NatParkPage() {
                             <h1 id='activities-header'>Activities in {park[0].fullName}</h1>
                             <ul id='activities-wrapper'>
                                 {
-                                    parkActivities.map((activity) => {
+                                    thingsToDo ?
+                                    thingsToDo.data.map((activity) => {
                                         return (
-                                            <div id='activity' key={activity.name}>
-                                                {activity.name}
-                                                
+                                            <div id='activity' key={activity.id}>
+                                                <h2>{activity.activities[0].name}</h2>
+                                                <img id='activity-image' src={activity.images[0].url} />
+                                                <p id='activity-description'>{activity.shortDescription}</p>
                                             </div>
                                         );
                                     })
+                                    : ''
                                 }
                             </ul>
                         </section>

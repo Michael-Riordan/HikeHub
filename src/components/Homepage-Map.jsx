@@ -114,7 +114,6 @@ export default function HomepageMap({coordinates, parks, images}) {
                 })
             })
 
-            console.log(filteredParksByState);
             setParksByState(filteredParksByState);
 
         } else {

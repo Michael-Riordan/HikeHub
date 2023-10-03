@@ -26,6 +26,7 @@
 
 #park-information {
     display: flex;
+    flex-direction: column;
     width: 100vw;
     font-family: 'DMSerifReg';
 }
@@ -37,12 +38,13 @@
     gap: 25px;
     padding: 40px;
     margin: 20px;
-    overflow-x: scroll;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 }
 
 #activities-header {
     color: rgb(42, 72, 34);
-    font-size: 20px;
+    font-size: 2rem;
     text-decoration: underline;
     margin: 20px;
     font-family: 'DMSerifReg';
@@ -65,13 +67,40 @@
     text-align: left;
 }
 
-#activity-image {
-    width: 25vw;
-    height: 25vw;
+.activity-image {
+    width: 20vw;
+    height: 20vw;
+    border-radius: 20px;
 }
 
 #activity-description {
-    width: 25vw;
+    width: 20vw;
+    color: rgb(42, 72, 34);
+}
+
+#activity-list {
+    overflow-y: scroll;
+    height: 70vh;
+    margin-bottom: 20px;
+    box-shadow: 2px 2px 10px 0px black;
+    border-radius: 20px;
+}
+
+#activity-name {
+    width: 20vw;
+    color: rgb(42, 72, 34);
+}
+
+#activity-wrapper {
+    background-color: rgb(175, 205, 166);
+    border-radius: 20px;
+    margin-bottom: 10px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.park-activities-section {
+    margin: 20px;
 }
 
 

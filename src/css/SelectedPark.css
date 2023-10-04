@@ -35,19 +35,18 @@
     list-style-type: none;
     display: flex;
     flex-direction: row;
-    gap: 25px;
     padding: 40px;
-    margin: 20px;
+    gap: 20px;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: start;
 }
 
 #activities-header {
     color: rgb(42, 72, 34);
     font-size: 2rem;
     text-decoration: underline;
-    margin: 20px;
     font-family: 'DMSerifReg';
+    text-align: left;
 }
 
 #activity {
@@ -68,14 +67,15 @@
 }
 
 .activity-image {
-    width: 20vw;
-    height: 20vw;
+    width: 25vw;
+    height: 25vw;
     border-radius: 20px;
 }
 
 #activity-description {
-    width: 20vw;
+    width: 25vw;
     color: rgb(42, 72, 34);
+    text-decoration: none;
 }
 
 #activity-list {
@@ -87,16 +87,24 @@
 }
 
 #activity-name {
-    width: 20vw;
+    width: 25vw;
+    font-size: 1.3rem;
     color: rgb(42, 72, 34);
 }
 
 #activity-wrapper {
+    display: block;
     background-color: rgb(175, 205, 166);
     border-radius: 20px;
-    margin-bottom: 10px;
     padding: 10px;
     margin: 10px;
+    margin-bottom: 20px;
+    text-decoration: none;
+}
+
+#activity-wrapper:hover {
+    cursor: pointer;
+    background-color: rgb(149, 173, 142);
 }
 
 .park-activities-section {

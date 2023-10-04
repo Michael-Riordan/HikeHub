@@ -9,6 +9,7 @@ import './css/SelectedPark.css'
 import './css/Map.css'
 import { createBrowserRouter as Routes, Route, BrowserRouter, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom'
 import RecAreaPage from './components/RecAreaPage';
+import SelectedActivity from './components/SelectedActivity';
 
 function App() {
   const router = createBrowserRouter(
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/NatParkPage" element={<NatParkPage />} />
         <Route path="/RecAreaPage" element={<RecAreaPage />} />
+        <Route path="/SelectedActivity" element={<SelectedActivity />} />
       </Route>
     )
   );

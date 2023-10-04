@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Map from "./Map";
 import ImageSlider from "./ImageSlider";
 
@@ -101,11 +102,11 @@ export default function NatParkPage() {
                                                     {
                                                         activityList.map((activity) => {
                                                             return (
-                                                                <div key={activity.name} id='activity-wrapper'>
+                                                                <Link key={activity.name} id='activity-wrapper' to='/SelectedActivity'>
                                                                     <h1 id='activity-name'>{activity.name}</h1>
                                                                     <img className='activity-image' src={activity.image} />
                                                                     <p id='activity-description'>{activity.description}</p>
-                                                                </div>
+                                                                </Link>
 
                                                             );
                                                         })

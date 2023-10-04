@@ -219,7 +219,7 @@ export default function HomepageMap({coordinates, parks, images}) {
                             park.images.length > 0 ? image = park.images[0].url : image = noImageIcon;
                             return (
                                 <>
-                                    <Link id='park-and-info' to='/NatParkPage' state={{selectedPark: [park], userLocation: userLocation}}>
+                                    <Link key={park.fullName} id='park-and-info' to='/NatParkPage' state={{selectedPark: [park], userLocation: userLocation}}>
                                         <img id='park-image' src={image} />
                                         <h2 id='park-name'>{park.fullName}</h2>
                                     </Link>
@@ -271,6 +271,7 @@ export default function HomepageMap({coordinates, parks, images}) {
                             longitude={Number(selectedMarker.longitude)}
                             onClose={() => setSelectedMarker(null)}
                             closeOnClick={false}
+                            key={selectedMarker.parkName}
                         >
                             <div id='popup-div'>
                                 <img id='popup-park-image' src={selectedMarker.parkImage} />

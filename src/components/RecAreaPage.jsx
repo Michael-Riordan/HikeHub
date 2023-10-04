@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Map from "./Map";
+import ParkMap from "./ParkMap";
 import ImageSlider from "./ImageSlider";
 
 export default function RecAreaPage() {
@@ -81,7 +81,7 @@ export default function RecAreaPage() {
                 <section id='rec-area-page-body'>
                     <section id='rec-area-map'>
                         <ImageSlider images={selectedRecAreaImages} />
-                        <Map 
+                        <ParkMap 
                             latitude={recAreaCoordinates.latitude}
                             longitude={recAreaCoordinates.longitude}
                             geojson={recAreaGeoJson}

@@ -1,18 +1,20 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Map from "./Map";
+import ParkMap from "./ParkMap";
 import ImageSlider from "./ImageSlider";
 
 export default function NatParkPage() {
-    const location = useLocation();
-    const [park, setPark] = useState(location.state.selectedPark);
     const [geoJsonCoordinates, setGeoJsonCoordinates] = useState([]);
     const [images, setImages] = useState([]);
-    const [userLocation, setUserLocation] = useState(location.state.userLocation);
     const [groupedActivities, setGroupedActivities] = useState(null);
     const [keys, setKeys] = useState([]);
 
+    const location = useLocation();
+    const park = location.state.selectedPark;
+    const userLocation = location.state.userLocation;
+    
+    
     useEffect(() => {
 
         const parkCode = park[0].parkCode;
@@ -49,6 +51,11 @@ export default function NatParkPage() {
             const jsonResponse = await response.json();
             jsonResponse.data.forEach(activity => {
                 const activityType = activity.activities[0].name;
+                if (activityType === 'Hiking') {
+                    if (activity.latitude === '') {
+                        console.log(activity);
+                    }
+                }
                 const activityTitle = activity.title;
                 const activityDescription = activity.shortDescription;
                 const activityImage = activity.images[0].url;
@@ -75,7 +82,7 @@ export default function NatParkPage() {
             <section id='rec-area-page-body'>
                 <section id='rec-area-map'>
                         <ImageSlider images={images}/>
-                            <Map 
+                            <ParkMap 
                                 latitude={park[0].latitude}
                                 longitude={park[0].longitude}
                                 geojson={geoJsonCoordinates}
@@ -102,7 +109,7 @@ export default function NatParkPage() {
                                                     {
                                                         activityList.map((activity) => {
                                                             return (
-                                                                <Link key={activity.name} id='activity-wrapper' to='/SelectedActivity'>
+                                                                <Link key={activity.name} id='activity-wrapper' to='/SelectedActivity' state={{activityName: activity.name, latitude: activity.coords.lat, longitude: activity.coords.lng}}>
                                                                     <h1 id='activity-name'>{activity.name}</h1>
                                                                     <img className='activity-image' src={activity.image} />
                                                                     <p id='activity-description'>{activity.description}</p>

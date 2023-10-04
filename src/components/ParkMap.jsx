@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
-export default function Map(coordinates) {
+export default function ParkMap(coordinates) {
     const [routeGeojson, setRouteGeojson] = useState(null);
     const [routeSteps, setRouteSteps] = useState([]);
 

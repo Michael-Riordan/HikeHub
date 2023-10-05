@@ -13,6 +13,7 @@ export default function NatParkPage() {
     const location = useLocation();
     const park = location.state.selectedPark;
     const userLocation = location.state.userLocation;
+    console.log(park);
     
     
     useEffect(() => {
@@ -51,11 +52,6 @@ export default function NatParkPage() {
             const jsonResponse = await response.json();
             jsonResponse.data.forEach(activity => {
                 const activityType = activity.activities[0].name;
-                if (activityType === 'Hiking') {
-                    if (activity.latitude === '') {
-                        console.log(activity);
-                    }
-                }
                 const activityTitle = activity.title;
                 const activityDescription = activity.shortDescription;
                 const activityImage = activity.images[0].url;
@@ -109,10 +105,33 @@ export default function NatParkPage() {
                                                     {
                                                         activityList.map((activity) => {
                                                             return (
-                                                                <Link key={activity.name} id='activity-wrapper' to='/SelectedActivity' state={{activityName: activity.name, latitude: activity.coords.lat, longitude: activity.coords.lng}}>
-                                                                    <h1 id='activity-name'>{activity.name}</h1>
-                                                                    <img className='activity-image' src={activity.image} />
-                                                                    <p id='activity-description'>{activity.description}</p>
+                                                                
+                                                                <Link 
+                                                                    key={activity.name} 
+                                                                    id='activity-wrapper' 
+                                                                    to='/SelectedActivity' 
+                                                                    state={
+                                                                        {
+                                                                            activityName: activity.name, 
+                                                                            latitude: activity.coords.lat, 
+                                                                            longitude: activity.coords.lng, 
+                                                                            image: activity.image,
+                                                                            userLocation: userLocation,
+                                                                            parkAddress: park[0].addresses[0],
+                                                                            parkLatLng: {lat: park[0].latitude, lng: park[0].longitude},
+                                                                        }
+                                                                    }
+                                                                >
+                                                                    <h1 id='activity-name'>
+                                                                        {activity.name}
+                                                                    </h1>
+                                                                    <img 
+                                                                        className='activity-image' 
+                                                                        src={activity.image} 
+                                                                    />
+                                                                    <p id='activity-description'>
+                                                                        {activity.description}
+                                                                    </p>
                                                                 </Link>
 
                                                             );

@@ -276,7 +276,13 @@ export default function HomepageMap({coordinates, parks, images}) {
                             <div id='popup-div'>
                                 <img id='popup-park-image' src={selectedMarker.parkImage} />
                                 <h3 id='popup-park-name'>{selectedMarker.parkName}</h3>
-                                <Link to='/NatParkPage' state={{selectedPark: selectedPark, userLocation: userLocation}}>Read More</Link>
+                                <Link 
+                                    to='/NatParkPage' 
+                                    state={{selectedPark: selectedPark, userLocation: userLocation}}
+                                    id='popup-link'
+                                >
+                                    Read More
+                                </Link>
                             </div>
                         </Popup>
                 )}

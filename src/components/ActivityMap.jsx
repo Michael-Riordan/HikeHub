@@ -10,7 +10,6 @@ export default function ActivityMap({coords}) {
         zoom: 6,
     });
     const [markerSelected, setMarkerSelected] = useState(true);
-    console.log(encodeURI(coords.parkAddress.line2));
     const directionsPointer = coords.lat === '' ? encodeURI(coords.parkAddress.line2) : `${coords.parkLatLng.lat},${coords.parkLatLng.lng}`;
 
     return (
@@ -47,7 +46,8 @@ export default function ActivityMap({coords}) {
                                 <h3 id='popup-park-name'>{coords.name}</h3>
                                 <a 
                                     href={`https://www.google.com/maps/dir/${coords.userLocation.latitude}, ${coords.userLocation.longitude}/${directionsPointer}`}
-                                    target="_blank"
+                                    target='_blank'
+                                    id='popup-link'
                                 >
                                     Get Directions
                                 </a>

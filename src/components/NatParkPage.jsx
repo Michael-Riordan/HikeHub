@@ -13,7 +13,6 @@ export default function NatParkPage() {
     const location = useLocation();
     const park = location.state.selectedPark;
     const userLocation = location.state.userLocation;
-    console.log(park);
     
     
     useEffect(() => {
@@ -61,7 +60,7 @@ export default function NatParkPage() {
                     activitiesObject[activityType] = [];
                 }
 
-                activitiesObject[activityType].push({name: activityTitle, description: activityDescription, image: activityImage, coords: activityLngLat});
+                activitiesObject[activityType].push({name: activityTitle, description: activityDescription, image: activityImage, coords: activityLngLat, activityObj: activity});
             })
 
             setGroupedActivities(activitiesObject);
@@ -119,6 +118,7 @@ export default function NatParkPage() {
                                                                             userLocation: userLocation,
                                                                             parkAddress: park[0].addresses[0],
                                                                             parkLatLng: {lat: park[0].latitude, lng: park[0].longitude},
+                                                                            activityObj: activity.activityObj,
                                                                         }
                                                                     }
                                                                 >

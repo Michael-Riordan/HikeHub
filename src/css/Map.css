@@ -102,3 +102,8 @@
 .mapboxgl-popup-close-button:focus {
     outline: none;
 }
+
+#popup-park-image-park {
+    width: 150px;
+    height: 100px;
+}

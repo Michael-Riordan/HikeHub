@@ -16,3 +16,8 @@
 body {
   margin: 0;
 }
+
+* {
+  font-family: 'DMSerifReg';
+  color: rgb(42, 72, 34);
+}

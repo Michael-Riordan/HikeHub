@@ -198,7 +198,6 @@ export default function HomePage() {
                 allNationalParks.forEach(park => {
                     if (park.images.length > 0) {
                         parkURL = park.images[0].url;
-                        console.log(parkURL);
                     }
                     const parkCoords = {parkName: park.fullName, latitude: park.latitude, longitude: park.longitude, parkImage: parkURL,}
                     allParkCoords.push(parkCoords);

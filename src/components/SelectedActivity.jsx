@@ -40,33 +40,33 @@ export default function SelectedActivity() {
             />
             <h1 id='activities-header'>{activityName}</h1>
             <div id='activity-info-wrapper'>
-                <h2>Seasons:</h2>
+                <h2 className='activity-descriptor'>Seasons:</h2>
                 { 
                     descriptionAvailable(activityObj.season.join(', ')) ?
-                    <p>{activityObj.season.join(', ')}</p> :
-                    <p>No seasonal information available.</p>
+                    <p className='activity-info'>{activityObj.season.join(', ')}</p> :
+                    <p className='activity-info'>No seasonal information available.</p>
                 }
-                <h2>Duration:</h2>
+                <h2 className='activity-descriptor'>Duration:</h2>
                 {
                     descriptionAvailable(activityObj.duration) ? 
-                    <p>{cleanText(activityObj.duration)}</p> :
-                    <p>No duration information available.</p>
+                    <p className='activity-info'>{cleanText(activityObj.duration)}</p> :
+                    <p className='activity-info'>No duration information available.</p>
                 }
                 {
                     descriptionAvailable(activityObj.durationDescription) ? 
-                    <p>{cleanText(activityObj.durationDescription)}</p> :
+                    <p className='activity-info'>{cleanText(activityObj.durationDescription)}</p> :
                     ''      
                 }
-                <h2>Pets:</h2>
+                <h2 className='activity-descriptor'>Pets:</h2>
                 { descriptionAvailable(activityObj.petsDescription) ? 
-                    <p>{cleanText(activityObj.petsDescription)}</p> :
-                    <p>No pet accessibility information available.</p>
+                    <p className='activity-info'>{cleanText(activityObj.petsDescription)}</p> :
+                    <p className='activity-info'>No pet accessibility information available.</p>
                 }
-                <h2>Description:</h2>
+                <h2 className='activity-descriptor'>Description:</h2>
                 {
                     descriptionAvailable(activityObj.longDescription) ?
-                    <p>{cleanText(activityObj.longDescription)}</p> :
-                    <p>No description currently available.</p>
+                    <p className='activity-info'>{cleanText(activityObj.longDescription)}</p> :
+                    <p className='activity-info'>No description currently available.</p>
                 }
             </div>
         </>

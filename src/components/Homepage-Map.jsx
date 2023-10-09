@@ -8,16 +8,12 @@ import NationalParkAutocomplete from "./NationalParkAutocomplete";
 import { Link } from "react-router-dom";
 
 export default function HomepageMap({coordinates, parks, images}) {
-    const [allParkCoordinates, setAllParkCoordinates] = useState(coordinates.parkCoordinates);
-    const [allParks, setAllParks] = useState(parks);
     const [viewport, setViewport] = useState({
         latitude: 39.8283,
         longitude: -98.5795,
         zoom: 2.5,
     });
-    const [userLocation, setUserLocation] = useState(coordinates.userLocation);
     const [selectedMarker, setSelectedMarker] = useState(null);
-    const [selectedParkImage, setSelectedParkImage] = useState(null);
     const [selectedPark, setSelectedPark] = useState(null);
     const [selectedActivities, setSelectedActivities] = useState([]);
     const [filteredParkCoordinates, setFilteredParkCoordinates] = useState(coordinates.parkCoordinates);
@@ -27,6 +23,10 @@ export default function HomepageMap({coordinates, parks, images}) {
     const [parksByActivities, setParksByActivities] = useState([]);
     const [selectedNationalParks, setSelectedNationalParks] = useState([]);
     const [parksBySelectedPark, setParksBySelectedPark] = useState([]);
+
+    const allParkCoordinates = coordinates.parkCoordinates;
+    const allParks = parks;
+    const userLocation = coordinates.userLocation;
 
     const handleActivitySelection = (activities) => {
         setSelectedActivities(activities);
@@ -219,8 +219,8 @@ export default function HomepageMap({coordinates, parks, images}) {
                             park.images.length > 0 ? image = park.images[0].url : image = noImageIcon;
                             return (
                                 <>
-                                    <Link key={park.fullName} id='park-and-info' to='/NatParkPage' state={{selectedPark: [park], userLocation: userLocation}}>
-                                        <img id='park-image' src={image} />
+                                    <Link key={park.fullName} id='park-and-info' to='/NatParkPage' state={{selectedPark: [park], userLocation: userLocation, parkImage: image}}>
+                                        <img id='park-image' src={image}/>
                                         <h2 id='park-name'>{park.fullName}</h2>
                                     </Link>
                                 </>
@@ -278,7 +278,7 @@ export default function HomepageMap({coordinates, parks, images}) {
                                 <h3 id='popup-park-name'>{selectedMarker.parkName}</h3>
                                 <Link 
                                     to='/NatParkPage' 
-                                    state={{selectedPark: selectedPark, userLocation: userLocation}}
+                                    state={{selectedPark: selectedPark, userLocation: userLocation, parkImage: selectedMarker.parkImage}}
                                     id='popup-link'
                                 >
                                     Read More

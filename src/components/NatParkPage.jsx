@@ -1,8 +1,8 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ParkMap from "./ParkMap";
 import ImageSlider from "./ImageSlider";
+import NationalParkPageMap from "./NationalParkPageMap";
 
 export default function NatParkPage() {
     const [geoJsonCoordinates, setGeoJsonCoordinates] = useState([]);
@@ -77,13 +77,15 @@ export default function NatParkPage() {
             <section id='rec-area-page-body'>
                 <section id='rec-area-map'>
                         <ImageSlider images={images}/>
-                            <ParkMap 
-                                latitude={park[0].latitude}
-                                longitude={park[0].longitude}
-                                geojson={geoJsonCoordinates}
-                                type={'nationalPark'}
-                                userLocation={userLocation}
-                            />
+                        <NationalParkPageMap 
+                            latitude={park[0].latitude}
+                            longitude={park[0].longitude}
+                            geojson={geoJsonCoordinates}
+                            type={'nationalPark'}
+                            userLocation={userLocation}
+                            parkImage={images[0]}
+                            parkName={park[0].fullName}
+                        />
                 </section> 
                 <section id='park-information'>
                     <section className='park-page-name-and-description-wrapper'>

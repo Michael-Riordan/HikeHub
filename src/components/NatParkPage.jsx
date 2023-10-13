@@ -76,7 +76,7 @@ export default function NatParkPage() {
             userLocation == null || park == null? '' : 
             <section id='rec-area-page-body'>
                 <section id='rec-area-map'>
-                        <ImageSlider images={images}/>
+                        <ImageSlider images={images} id='national-park-page-slider'/>
                         <NationalParkPageMap 
                             latitude={park[0].latitude}
                             longitude={park[0].longitude}
@@ -85,6 +85,7 @@ export default function NatParkPage() {
                             userLocation={userLocation}
                             parkImage={images[0]}
                             parkName={park[0].fullName}
+                            id='national-park-page-map'
                         />
                 </section> 
                 <section id='park-information'>
@@ -102,11 +103,11 @@ export default function NatParkPage() {
                                     return (
                                         <div id='activity-name-and-list' key={key}>
                                             <h2 id='activity'>{key}</h2>
-                                            <div id='activity-list'>
+                                            <div className='activity-list'>
                                                     {
                                                         activityList.map((activity) => {
                                                             return (
-                                                                
+                                        
                                                                 <Link 
                                                                     key={activity.name} 
                                                                     id='activity-wrapper' 

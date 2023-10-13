@@ -210,7 +210,7 @@ export default function HomepageMap({coordinates, parks, images}) {
                 <div id='filters-wrapper'>
                     <StateAutocomplete sendStateToMap={handleStateSelection}/>
                     <AdventureAutocomplete sendActivityToMap={handleActivitySelection} />
-                    <NationalParkAutocomplete parks={parks} sendNationalParksToMap={handleNationalParkSelection}/>
+                    <NationalParkAutocomplete parks={filteredParks} sendNationalParksToMap={handleNationalParkSelection}/>
                 </div>
                 <div id='list'>
                     {
@@ -281,7 +281,7 @@ export default function HomepageMap({coordinates, parks, images}) {
                                     state={{selectedPark: selectedPark, userLocation: userLocation, parkImage: selectedMarker.parkImage}}
                                     id='popup-link'
                                 >
-                                    Read More
+                                    Explore
                                 </Link>
                             </div>
                         </Popup>

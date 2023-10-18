@@ -47,7 +47,7 @@
     background-color: rgb(128, 193, 151);
 }
 
-#park-name {
+.park-name {
     font-size: .8rem;
     font-family: Helvetica Neue,Arial,Helvetica,sans-serif;
     margin-left: 20px;
@@ -55,11 +55,31 @@
     color: rgb(42, 72, 34);
 }
 
-#park-image {
+.park-image-loaded {
     width: 100px;
     height: 100px;
     justify-self: center;
     border-radius: 10px;
+}
+
+.park-image-loading {
+    width: 100px;
+    height: 100px;
+    justify-self: center;
+    border: 6px solid rgb(42, 72, 34);
+    border-top: 6px solid rgb(128, 193, 151);
+    border-radius: 50%;
+    animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 #popup-div {
@@ -74,6 +94,15 @@
 #popup-park-image {
     width: 100%;
     height: 200px;
+}
+
+#popup-park-image-loading {
+    width: 100%;
+    height: 200px;
+    border: 6px solid rgb(42, 72, 34);
+    border-top: 6px solid rgb(128, 193, 151);
+    border-radius: 50%;
+    animation: rotate 2s linear infinite;
 }
 
 #popup-park-name {

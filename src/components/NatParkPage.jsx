@@ -13,6 +13,7 @@ export default function NatParkPage() {
     const location = useLocation();
     const park = location.state.selectedPark;
     const userLocation = location.state.userLocation;
+    console.log(park);
     
     
     useEffect(() => {
@@ -70,6 +71,20 @@ export default function NatParkPage() {
         fetchThingsToDo();
     }, [park]);
 
+    useEffect(() => {
+        const parkCode = park[0].parkCode;
+        const parkCodeQuery =  `?parkCode=${parkCode}`;
+
+        const fetchVisitorCenters = async () => {
+            const response = await fetch(`http://192.168.0.59:3000/api/visitorCenters${parkCodeQuery}`);
+            const jsonResponse = await response.json();
+            console.log(jsonResponse);
+        }
+
+        fetchVisitorCenters();
+
+    }, [park])
+
     return (
         <>
             {
@@ -101,6 +116,7 @@ export default function NatParkPage() {
                                 keys.map((key) => {
                                     const activityList = groupedActivities[key];
                                     return (
+                                        
                                         <div id='activity-name-and-list' key={key}>
                                             <h2 id='activity'>{key}</h2>
                                             <div className='activity-list'>

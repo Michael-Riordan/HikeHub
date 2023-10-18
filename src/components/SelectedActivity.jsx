@@ -13,7 +13,6 @@ export default function SelectedActivity() {
     const userLocation = location.state.userLocation;
     const parkAddress = location.state.parkAddress;
     const parkLatLng = location.state.parkLatLng;
-    console.log(activityObj);
 
     const cleanText = (dirtyText) => {
         return dirtyText.replace(/<[^>]*>/g, '');

@@ -8,11 +8,8 @@ import HomepageMap from "./Homepage-Map";
 export default function HomePage() {
     const [userLocation, setUserLocation] = useState(null);
     const [userState, setUserState] = useState(null);
-    const [recAreas, setRecAreas] = useState([]);
-    const [recAreaImages, setRecAreaImages] = useState([]);
-    const [nationalParksByArea, setNationalParksByArea] = useState([]);
     const [allNationalParks, setAllNationalParks] = useState([]);
-    const [allRecAreaImages, setAllRecAreaImages] = useState([]);
+    const [nationalParksByArea, setNationalParksByArea] = useState([]);
     const [dataFetched, setDataFetched] = useState(false);
     const [totalParks, setTotalParks] = useState(0);
     const [parkCount, setParkCount] = useState(0);
@@ -64,64 +61,6 @@ export default function HomePage() {
         }
 
     }, [userLocation, userState]);
-
-    /*
-    useEffect(() => {
-        const areas = [];
-
-        const fetchRecAreas = async () => {
-            const stateCodeQuery= `?stateCode=${userState}`;
-            const result = await fetch(`http://192.168.0.59:3000/api/recAreas${stateCodeQuery}`);
-            const jsonResult = await result.json();
-            jsonResult.RECDATA.forEach(recArea => {
-                areas.push(recArea);
-            })
-            setRecAreas(areas);
-            sessionStorage.setItem('recAreas', JSON.stringify(areas));
-        }
-
-        if (userLocation != null) {
-            fetchRecAreas();
-        }
-
-    }, [userLocation, userState]);
-    */
-
-    /*useEffect(() => {
-        const storedImageData = JSON.parse(sessionStorage.getItem('recAreaImages'));
-        const storedAllImagesData = JSON.parse(sessionStorage.getItem('allRecImages'));
-
-        //fetches each img related to a rec area specified by id
-        const fetchRecAreaImg = async (id, name) => {
-            const IdQuery = `?id=${id}`
-            const response = await fetch(`http://192.168.0.59:3000/api/recAreaImg${IdQuery}`)
-            const jsonResponse = await response.json();
-            if (jsonResponse.RECDATA.length > 0) {
-                const title = jsonResponse.RECDATA[0].Title;
-                const imageURL = jsonResponse.RECDATA[0].URL;
-                const recAreaID = id;
-                const titleAndImage = {
-                    recAreaName: name,
-                    title: title,
-                    imageURL: imageURL,
-                    recAreaID: recAreaID,
-                }
-                setAllRecAreaImages((prevImages) => [...prevImages, jsonResponse]);
-                setRecAreaImages((prevArray) => [...prevArray, titleAndImage]);
-            }
-        }
-        
-        if (storedImageData && storedImageData.length > 0) {
-            setAllRecAreaImages(storedAllImagesData)
-            setRecAreaImages(storedImageData);
-        } else {
-            recAreas.forEach(recArea => {
-                console.log('fetching image data');
-                fetchRecAreaImg(recArea.RecAreaID, recArea.RecAreaName);
-            }) 
-        }
-    }, [recAreas]);
-    */
 
     useEffect(() => {
         const storedNationalParkData = JSON.parse(sessionStorage.getItem('nationalParks'));
@@ -230,6 +169,8 @@ export default function HomePage() {
 
     }, [allRecAreaImages, recAreaImages]);
     */
+
+
 
     return (
         <section id='homepage-body'>

@@ -7,7 +7,7 @@ import StateAutocomplete from "./StateAutocomplete";
 import NationalParkAutocomplete from "./NationalParkAutocomplete";
 import { Link } from "react-router-dom";
 
-export default function HomepageMap({coordinates, parks, images}) {
+export default function HomepageMap({coordinates, parks}) {
     const [viewport, setViewport] = useState({
         latitude: 39.8283,
         longitude: -98.5795,
@@ -203,7 +203,6 @@ export default function HomepageMap({coordinates, parks, images}) {
         }
     }, [parksByState, parksByActivities, parksBySelectedPark]);
 
-
     return (
         <div id='map-and-list'>
             <div id='filter-and-list-wrapper'>
@@ -214,14 +213,17 @@ export default function HomepageMap({coordinates, parks, images}) {
                 </div>
                 <div id='list'>
                     {
-                        filteredParks.map((park) => {
+                        filteredParks.map((park, index) => {
                             let image;
                             park.images.length > 0 ? image = park.images[0].url : image = noImageIcon;
                             return (
                                 <>
                                     <Link key={park.fullName} id='park-and-info' to='/NatParkPage' state={{selectedPark: [park], userLocation: userLocation, parkImage: image}}>
-                                        <img id='park-image' src={image}/>
-                                        <h2 id='park-name'>{park.fullName}</h2>
+                                        <img 
+                                            className={'park-image-loaded'}
+                                            src={image}
+                                        />
+                                        <h2 className='park-name'>{park.fullName}</h2>
                                     </Link>
                                 </>
                             );
@@ -274,7 +276,10 @@ export default function HomepageMap({coordinates, parks, images}) {
                             key={selectedMarker.parkName}
                         >
                             <div id='popup-div'>
-                                <img id='popup-park-image' src={selectedMarker.parkImage} />
+                                <img 
+                                    id='popup-park-image' 
+                                    src={selectedMarker.parkImage} 
+                                />
                                 <h3 id='popup-park-name'>{selectedMarker.parkName}</h3>
                                 <Link 
                                     to='/NatParkPage' 

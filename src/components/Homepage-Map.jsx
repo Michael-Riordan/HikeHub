@@ -23,6 +23,7 @@ export default function HomepageMap({coordinates, parks}) {
     const [parksByActivities, setParksByActivities] = useState([]);
     const [selectedNationalParks, setSelectedNationalParks] = useState([]);
     const [parksBySelectedPark, setParksBySelectedPark] = useState([]);
+    const [markerImageLoaded, setMarkerImageLoaded] = useState(false);
 
     const allParkCoordinates = coordinates.parkCoordinates;
     const allParks = parks;
@@ -38,6 +39,10 @@ export default function HomepageMap({coordinates, parks}) {
 
     const handleNationalParkSelection = (selectedParks) => {
         setSelectedNationalParks(selectedParks);
+    }
+
+    const handleMarkerImageLoad = () => {
+        setMarkerImageLoaded(true);
     }
 
     const filterCoords = (parksToFilter, coordsToFilter) => {
@@ -261,6 +266,7 @@ export default function HomepageMap({coordinates, parks}) {
                                             height: '25px',
                                             cursor: 'pointer',
                                         }}
+                                        
                                     />
                                 </div>
                             </Marker>
@@ -271,15 +277,23 @@ export default function HomepageMap({coordinates, parks}) {
                         <Popup
                             latitude={Number(selectedMarker.latitude)}
                             longitude={Number(selectedMarker.longitude)}
-                            onClose={() => setSelectedMarker(null)}
+                            onClose={() => {
+                                setMarkerImageLoaded(false) 
+                                setSelectedMarker(null)
+                            }}
                             closeOnClick={false}
                             key={selectedMarker.parkName}
                         >
                             <div id='popup-div'>
-                                <img 
-                                    id='popup-park-image' 
-                                    src={selectedMarker.parkImage} 
-                                />
+                                <div id={markerImageLoaded ? '' : 'image-container'}>
+                                    <img 
+                                        id={markerImageLoaded ? `popup-park-image` : 'loading'} 
+                                        src={selectedMarker.parkImage}
+                                        style={markerImageLoaded ? {visibility: 'visible'} : {visibility: 'hidden'}} 
+                                        onLoad={handleMarkerImageLoad}
+                                        />
+                                </div>
+                                {markerImageLoaded ? '' : <p style={{fontSize: '1rem'}}>Loading...</p>}
                                 <h3 id='popup-park-name'>{selectedMarker.parkName}</h3>
                                 <Link 
                                     to='/NatParkPage' 

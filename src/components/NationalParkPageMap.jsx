@@ -11,9 +11,61 @@ export default function NationalParkPageMap(coordinates) {
     });
     const [routeGeojson, setRouteGeojson] = useState(null);
     const [markerSelected, setMarkerSelected] = useState(null);
+    const [timeToDestination, setTimeToDestination] = useState('');
+    const [distanceToDestination, setDistanceToDestination] = useState('')
 
     const visitorCenters = coordinates.visitorCenters;
     const park = coordinates.park[0];
+
+    const isPlural = (num) => {
+        return num > 1;
+    }
+
+    const convertToDays = (hours) => {
+        const days = hours / 24;
+        return days;
+    }
+
+    const convertTime = (seconds) => {
+        //incomplete - need to refine for exact number
+        console.log(seconds);
+        let remainingHours = 0;
+        let remainingMinutes = 0;
+        let daysPlural;
+
+        const hours = (seconds / 60) / 60;
+        const minutes = (hours % 1) * 60;
+
+        let days = convertToDays(Math.floor(hours));
+        days > 1 ? remainingHours = (days % 1) * 24 : remainingHours = Math.floor(hours);
+
+        if (days >= 1) {
+            daysPlural = isPlural(Math.floor(days));
+        }
+
+        const hoursPlural = remainingHours > 0 ? isPlural(Math.round(remainingHours)) : isPlural(Math.floor(hours));
+        const minutesPlural = isPlural(Math.round(minutes));
+
+        const daysDescriptor = daysPlural ? 'days' : 'day';
+        const hourDescriptor = hoursPlural ? 'hours' : 'hour';
+        const minutesDescriptor = minutesPlural ? 'minutes' : 'minute';
+
+
+
+        
+        const durationString = Math.floor(days) > 0 ? 
+        `${Math.floor(days)} ${daysDescriptor}, ${Math.round(remainingHours)} ${hourDescriptor}, ${Math.round(minutes)} ${minutesDescriptor}` :
+        `${Math.floor(hours)} ${hourDescriptor}, ${Math.round(minutes)} ${minutesDescriptor}`
+
+        setTimeToDestination(durationString);
+    }
+
+    const convertToMiles = (meters) => {
+        const metersPerMile = 1609.344
+        const miles = (meters / metersPerMile).toFixed(1);
+        const mileDescriptor = isPlural(miles) ? 'miles' : 'mile';
+        setDistanceToDestination(`${miles} ${mileDescriptor}`);
+    }
 
     useEffect(() => {
         const userLongitude = coordinates.userLocation.longitude;
@@ -27,8 +79,12 @@ export default function NationalParkPageMap(coordinates) {
 
             const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${Number(visitorCenterCoords.longitude)},${Number(visitorCenterCoords.latitude)};${userLongitude},${userLatitude}?steps=true&geometries=geojson&access_token=${import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}`);
             const jsonResponse = await response.json();
-            console.log(jsonResponse);
-            jsonResponse.code === 'Ok' ? setRouteGeojson(jsonResponse) : setRouteGeojson(null);
+            if (jsonResponse.code === 'Ok') {
+                convertToMiles(jsonResponse.routes[0].distance);
+                convertTime(jsonResponse.routes[0].duration);
+                setRouteGeojson(jsonResponse);
+
+            }
         };
         
         if (visitorCenters.length > 0) {
@@ -144,8 +200,8 @@ export default function NationalParkPageMap(coordinates) {
                             {
                                 routeGeojson && (
                                     <>
-                                        <p>Duration: {routeGeojson.routes[0].duration} seconds.</p>
-                                        <p>Distance: {routeGeojson.routes[0].distance} meters.</p>
+                                        <p>Duration: {timeToDestination}</p>
+                                        <p>Distance: {distanceToDestination}</p>
                                     </>
                                 )
                             }

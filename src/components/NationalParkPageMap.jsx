@@ -7,7 +7,7 @@ export default function NationalParkPageMap(coordinates) {
     const [viewport, setViewport] = useState({
         latitude: coordinates.latitude,
         longitude: coordinates.longitude,
-        zoom: 10,
+        zoom: 9,
     });
     const [routeGeojson, setRouteGeojson] = useState(null);
     const [markerSelected, setMarkerSelected] = useState(null);
@@ -21,41 +21,21 @@ export default function NationalParkPageMap(coordinates) {
         return num > 1;
     }
 
-    const convertToDays = (hours) => {
-        const days = hours / 24;
-        return days;
-    }
-
     const convertTime = (seconds) => {
-        //incomplete - need to refine for exact number
-        console.log(seconds);
-        let remainingHours = 0;
-        let remainingMinutes = 0;
-        let daysPlural;
 
-        const hours = (seconds / 60) / 60;
-        const minutes = (hours % 1) * 60;
+        const days = (seconds / 60 /* seconds/min */ / 60 /* min/hour */ / 24 /* hours/day */);
 
-        let days = convertToDays(Math.floor(hours));
-        days > 1 ? remainingHours = (days % 1) * 24 : remainingHours = Math.floor(hours);
+        const hours = ((days % 1) * 24) /* hours/day */ 
 
-        if (days >= 1) {
-            daysPlural = isPlural(Math.floor(days));
-        }
+        const minutes = (hours % 1) * 60 /* minutes/day */
 
-        const hoursPlural = remainingHours > 0 ? isPlural(Math.round(remainingHours)) : isPlural(Math.floor(hours));
-        const minutesPlural = isPlural(Math.round(minutes));
+        const daysDescriptor = isPlural(days) ? 'days' : 'day';
+        const hoursDescriptor = isPlural(hours) ? 'hours' : 'hour';
+        const minutesDescriptor = isPlural(minutes) ? 'minutes' : 'minute';
 
-        const daysDescriptor = daysPlural ? 'days' : 'day';
-        const hourDescriptor = hoursPlural ? 'hours' : 'hour';
-        const minutesDescriptor = minutesPlural ? 'minutes' : 'minute';
-
-
-
-        
         const durationString = Math.floor(days) > 0 ? 
-        `${Math.floor(days)} ${daysDescriptor}, ${Math.round(remainingHours)} ${hourDescriptor}, ${Math.round(minutes)} ${minutesDescriptor}` :
-        `${Math.floor(hours)} ${hourDescriptor}, ${Math.round(minutes)} ${minutesDescriptor}`
+        `${Math.floor(days)} ${daysDescriptor}, ${Math.round(hours)} ${hoursDescriptor}, ${Math.round(minutes)} ${minutesDescriptor}` :
+        `${Math.floor(hours)} ${hoursDescriptor}, ${Math.round(minutes)} ${minutesDescriptor}`
 
         setTimeToDestination(durationString);
     }
@@ -200,8 +180,8 @@ export default function NationalParkPageMap(coordinates) {
                             {
                                 routeGeojson && (
                                     <>
-                                        <p>Duration: {timeToDestination}</p>
-                                        <p>Distance: {distanceToDestination}</p>
+                                        <p id='duration'>Travel Time: {timeToDestination}</p>
+                                        <p id='distance'>Distance: {distanceToDestination}</p>
                                     </>
                                 )
                             }

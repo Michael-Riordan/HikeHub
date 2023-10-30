@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Map, {Marker, Popup} from 'react-map-gl';
 import treeIcon from '../assets/tree-svgrepo-com.svg';
 import noImageIcon from '../assets/no-image-icon.jpg';
 import AdventureAutocomplete from "./AdventureAutocomplete";
 import StateAutocomplete from "./StateAutocomplete";
 import NationalParkAutocomplete from "./NationalParkAutocomplete";
-import { Link } from "react-router-dom";
 
 export default function HomepageMap({coordinates, parks}) {
     const [viewport, setViewport] = useState({
@@ -220,7 +220,8 @@ export default function HomepageMap({coordinates, parks}) {
                     {
                         filteredParks.map((park, index) => {
                             let image;
-                            park.images.length > 0 ? image = park.images[0].url : image = noImageIcon;
+                            park.images.length > 0 ? image = `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDIFY_CLOUD_NAME}/image/fetch/f_auto,q_auto/${park.images[0].url}` : image = noImageIcon;
+                            //park.images.length > 0 ? image = park.images[0].url : image = noImageIcon;
                             return (
                                 <>
                                     <Link key={park.fullName} id='park-and-info' to='/NatParkPage' state={{selectedPark: [park], userLocation: userLocation, parkImage: image}}>
@@ -293,15 +294,16 @@ export default function HomepageMap({coordinates, parks}) {
                                         onLoad={handleMarkerImageLoad}
                                         />
                                 </div>
-                                {markerImageLoaded ? '' : <p style={{fontSize: '1rem'}}>Loading...</p>}
                                 <h3 id='popup-park-name'>{selectedMarker.parkName}</h3>
-                                <Link 
-                                    to='/NatParkPage' 
-                                    state={{selectedPark: selectedPark, userLocation: userLocation, parkImage: selectedMarker.parkImage}}
-                                    id='popup-link'
-                                >
-                                    Explore
-                                </Link>
+                                {markerImageLoaded ?  
+                                    <Link 
+                                        to='/NatParkPage' 
+                                        state={{selectedPark: selectedPark, userLocation: userLocation, parkImage: selectedMarker.parkImage}}
+                                        id='popup-link'
+                                    >
+                                        Explore
+                                    </Link> :
+                                <p id='popup-link'>Loading...</p>}
                             </div>
                         </Popup>
                 )}

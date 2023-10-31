@@ -220,8 +220,9 @@ export default function HomepageMap({coordinates, parks}) {
                     {
                         filteredParks.map((park, index) => {
                             let image;
-                            park.images.length > 0 ? image = `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDIFY_CLOUD_NAME}/image/fetch/f_auto,q_auto/${park.images[0].url}` : image = noImageIcon;
-                            //park.images.length > 0 ? image = park.images[0].url : image = noImageIcon;
+                            park.images.length > 0 ? image = 
+                            `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/${park.images[0].url}` :
+                            image = noImageIcon;
                             return (
                                 <>
                                     <Link key={park.fullName} id='park-and-info' to='/NatParkPage' state={{selectedPark: [park], userLocation: userLocation, parkImage: image}}>

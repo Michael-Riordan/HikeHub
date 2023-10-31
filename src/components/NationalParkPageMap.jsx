@@ -29,9 +29,9 @@ export default function NationalParkPageMap(coordinates) {
 
         const minutes = (hours % 1) * 60 /* minutes/day */
 
-        const daysDescriptor = isPlural(days) ? 'days' : 'day';
-        const hoursDescriptor = isPlural(hours) ? 'hours' : 'hour';
-        const minutesDescriptor = isPlural(minutes) ? 'minutes' : 'minute';
+        const daysDescriptor = isPlural(Math.floor(days)) ? 'days' : 'day';
+        const hoursDescriptor = isPlural(Math.floor(hours)) ? 'hours' : 'hour';
+        const minutesDescriptor = isPlural(Math.floor(minutes)) ? 'minutes' : 'minute';
 
         const durationString = Math.floor(days) > 0 ? 
         `${Math.floor(days)} ${daysDescriptor}, ${Math.round(hours)} ${hoursDescriptor}, ${Math.round(minutes)} ${minutesDescriptor}` :

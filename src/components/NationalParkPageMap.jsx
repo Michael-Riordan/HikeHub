@@ -4,10 +4,11 @@ import treeIcon from '../assets/tree-svgrepo-com.svg'
 import cabin from '../assets/cabin-svgrepo-com.svg'
 
 export default function NationalParkPageMap(coordinates) {
+    const newCenteringLatitude = coordinates.latitude - .1; //allowing for full display of popup
     const [viewport, setViewport] = useState({
-        latitude: coordinates.latitude,
+        latitude: newCenteringLatitude,
         longitude: coordinates.longitude,
-        zoom: 9,
+        zoom: 10,
     });
     const [routeGeojson, setRouteGeojson] = useState(null);
     const [markerSelected, setMarkerSelected] = useState(null);

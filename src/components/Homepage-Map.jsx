@@ -45,6 +45,11 @@ export default function HomepageMap({coordinates, parks}) {
         setMarkerImageLoaded(true);
     }
 
+    const handleImageError = (image) => {
+        const markerImageElement = document.getElementById('loading');
+        markerImageElement.src = image
+    }
+
     const filterCoords = (parksToFilter, coordsToFilter) => {
         const filteredCoords = [];
         parksToFilter.forEach(park => {
@@ -220,15 +225,24 @@ export default function HomepageMap({coordinates, parks}) {
                     {
                         filteredParks.map((park, index) => {
                             let image;
-                            park.images.length > 0 ? image = 
-                            `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/${park.images[0].url}` :
+
+                            park.images.length > 0 ?
+                            image = park.images[0].url
+                            : 
                             image = noImageIcon;
+
                             return (
                                 <>
-                                    <Link key={park.fullName} id='park-and-info' to='/NatParkPage' state={{selectedPark: [park], userLocation: userLocation, parkImage: image}}>
+                                    <Link 
+                                        key={park.fullName} 
+                                        id='park-and-info' 
+                                        to='/NatParkPage' 
+                                        state={{selectedPark: [park], userLocation: userLocation, parkImage: image}}
+                                    >
                                         <img 
                                             className={'park-image-loaded'}
                                             src={image}
+                                            alt={park.images.length > 0 ? park.images[0].altText : 'No Image Available'}
                                         />
                                         <h2 className='park-name'>{park.fullName}</h2>
                                     </Link>
@@ -293,7 +307,8 @@ export default function HomepageMap({coordinates, parks}) {
                                         src={selectedMarker.parkImage}
                                         style={markerImageLoaded ? {visibility: 'visible'} : {visibility: 'hidden'}} 
                                         onLoad={handleMarkerImageLoad}
-                                        />
+                                        onError={() => handleImageError(selectedMarker.parkImage)}
+                                    />
                                 </div>
                                 <h3 id='popup-park-name'>{selectedMarker.parkName}</h3>
                                 {markerImageLoaded ?  

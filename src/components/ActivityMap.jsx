@@ -4,8 +4,10 @@ import treeIcon from '../assets/tree-svgrepo-com.svg'
 
 export default function ActivityMap({coords}) {
 
+    const newCenteringLatitude = coords.lat === '' ? coords.parkLatLng.lat - .2 : coords.lat - .2; //allows for full popup to be shown
+
     const [viewport, setViewport] = useState({
-        latitude: coords.lat === '' ? coords.parkLatLng.lat : coords.lat,
+        latitude: newCenteringLatitude,
         longitude: coords.lng === '' ? coords.parkLatLng.lng : coords.lng,
         zoom: 6,
     });

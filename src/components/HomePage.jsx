@@ -102,6 +102,8 @@ export default function HomePage() {
             twice on initial render with parkCount at 0, resulting in duplicate objects.
         */
 
+        console.log(import.meta.env.VITE_NODE_ENV);
+
         const cachedAllParks = sessionStorage.getItem('allParks');
 
         if (cachedAllParks && JSON.parse(cachedAllParks).length > 0) {

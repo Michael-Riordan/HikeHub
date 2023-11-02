@@ -49,7 +49,7 @@ export default function HomePage() {
         if (userLocation != null && userState == null) {
             const fetchLocation = async () => {
                 const coordinateQuery = `?coordinates=${encodeURIComponent(JSON.stringify(userLocation))}`
-                const result = await fetch(`http://192.168.0.59:3000/api/geolocation${coordinateQuery}`);
+                const result = await fetch(`https://national-park-application-c44bb8f1d790.herokuapp.com/api/geolocation${coordinateQuery}`);
                 const jsonResult = await result.json();
                 const state = jsonResult.plus_code.compound_code.split(' ')[2].replace(',', '');
                 setUserState(state);
@@ -68,7 +68,7 @@ export default function HomePage() {
         //fetches national parks by state code
         const fetchNationalParks = async () => {
             const stateCodeQuery = `?stateCode=${userState}`
-            const response = await fetch (`http://192.168.0.59:3000/api/NationalParks${stateCodeQuery}`);
+            const response = await fetch (`https://national-park-application-c44bb8f1d790.herokuapp.com/api/NationalParks${stateCodeQuery}`);
             const jsonResponse = await response.json();
             setNationalParksByArea(jsonResponse.data);
             sessionStorage.setItem('nationalParks', JSON.stringify(jsonResponse.data));
@@ -86,7 +86,7 @@ export default function HomePage() {
     const fetchAllParks = async () => {
 
         const countQuery = `?startCount=${parkCount}`;
-        const response = await fetch(`http://192.168.0.59:3000/api/AllNationalParks${countQuery}`);
+        const response = await fetch(`https://national-park-application-c44bb8f1d790.herokuapp.com/api/AllNationalParks${countQuery}`);
         const jsonResponse = await response.json();
         setParkCount((prevCount) => Number(prevCount) + Number(jsonResponse.limit));
         setTotalParks(Number(jsonResponse.total));

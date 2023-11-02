@@ -21,7 +21,7 @@ export default function NatParkPage() {
         const parkCode = park[0].parkCode;
         const parkCodeQuery = `?parkCode=${parkCode}`
         const fetchGeoJSONCoordinates = async () => {
-            const response = await fetch(`http://192.168.0.59:3000/api/NationalParkGeoJson${parkCodeQuery}`);
+            const response = await fetch(`https://national-park-application-c44bb8f1d790.herokuapp.com/api/NationalParkGeoJson${parkCodeQuery}`);
             const jsonResponse = await response.json();
             setGeoJsonCoordinates(jsonResponse);
         }
@@ -48,7 +48,7 @@ export default function NatParkPage() {
         let activitiesObject = {};
 
         const fetchThingsToDo = async () => {
-            const response = await fetch(`http://192.168.0.59:3000/api/NatParkThingsToDo${parkCodeQuery}`);
+            const response = await fetch(`https://national-park-application-c44bb8f1d790.herokuapp.com/api/NatParkThingsToDo${parkCodeQuery}`);
             const jsonResponse = await response.json();
             jsonResponse.data.forEach(activity => {
                 const activityType = activity.activities[0].name;
@@ -76,7 +76,7 @@ export default function NatParkPage() {
         const parkCodeQuery =  `?parkCode=${parkCode}`;
 
         const fetchVisitorCenters = async () => {
-            const response = await fetch(`http://192.168.0.59:3000/api/visitorCenters${parkCodeQuery}`);
+            const response = await fetch(`https://national-park-application-c44bb8f1d790.herokuapp.com/api/visitorCenters${parkCodeQuery}`);
             const jsonResponse = await response.json();
             setVisitorCenters(jsonResponse.data);
         }

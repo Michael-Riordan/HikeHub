@@ -96,10 +96,11 @@ export default function HomePage() {
 
     useEffect(() => {
         /*
-            Prevent the initial double call to fetchAllParks:
-            - During the initial render, parkCount is initialized with 0 by useState.
+            Prevent the initial double call to fetchAllParks during development:
+            - During the initial mount, parkCount is initialized with 0 by useState.
             - Without the isFirstRender ref, the useEffect would run fetchAllParks
-            twice on initial render with parkCount at 0, resulting in duplicate objects.
+            twice on initial mount with parkCount at 0, resulting in duplicate objects.
+            (<React.StrictMode> invokes render method twice in development)
         */
 
         const cachedAllParks = sessionStorage.getItem('allParks');
@@ -110,23 +111,30 @@ export default function HomePage() {
             setAllNationalParks(parsedAllParks)
 
         } else {
-            if (import.meta.env.VITE_NODE_ENV !== 'production') {
-                if (!isFirstRender.current) {
+            /* 
+                the below switch statements take into account that in a development environment
+                react will render the page twice on the initial mount (due to <React.StrictMode>)
+            */
+            switch (import.meta.env.VITE_NODE_ENV) {
+                case ('development'):
+                    if (!isFirstRender.current) {
+                        if (parkCount < totalParks || totalParks === 0) {
+                            console.log('calling');
+                            fetchAllParks();
+                        }
+                    } else {
+                        isFirstRender.current = false;
+                    }
+                    break;
+                
+                case ('production'): 
                     if (parkCount < totalParks || totalParks === 0) {
                         console.log('calling');
                         fetchAllParks();
                     }
-                } else {
-                    isFirstRender.current = false;
-                }
-            } else {
-                if (parkCount < totalParks || totalParks === 0) {
-                    console.log('calling');
-                    fetchAllParks();
-                }
+                    break;
             }
         }
-
 
     }, [parkCount, totalParks]);
 
@@ -161,23 +169,12 @@ export default function HomePage() {
     useEffect(() => {
 
         if (parkCount > totalParks) {
-
+            console.log('setting all parks to session storage');
             sessionStorage.setItem('allParks', JSON.stringify(allNationalParks));
 
         }
 
     }, [parkCount, totalParks]);
-
-    /*useEffect(() => {
-
-        // sessionStorage set on the last change of dependency array;
-        sessionStorage.setItem('recAreaImages', JSON.stringify(recAreaImages));
-        sessionStorage.setItem('allRecImages', JSON.stringify(allRecAreaImages));
-
-    }, [allRecAreaImages, recAreaImages]);
-    */
-
-
 
     return (
         <section id='homepage-body'>

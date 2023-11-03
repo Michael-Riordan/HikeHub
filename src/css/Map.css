@@ -10,12 +10,43 @@
 
 #filters-wrapper {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
     align-content: center;
     margin-bottom: 20px;
     width: 95%;
     padding-left: 10px;
+}
+
+#pagination-wrapper {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+#pagination-descriptor {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 0;
+    text-decoration: underline;
+}
+
+.alphabetical-range {
+    margin-top: 5px;
+    width: max-content;
+    align-self: center;
+    font-size: 1.2rem;
+    background-color: white;
+    cursor: pointer;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: none;
+}
+
+.alphabetical-range:hover {
+    background-color: rgb(128, 193, 151);
 }
 
 #list {

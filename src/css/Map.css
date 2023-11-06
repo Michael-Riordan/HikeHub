@@ -19,36 +19,6 @@
     padding-left: 10px;
 }
 
-#pagination-wrapper {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-#pagination-descriptor {
-    font-size: 1.2rem;
-    text-align: center;
-    margin-bottom: 0;
-    text-decoration: underline;
-}
-
-.alphabetical-range {
-    margin-top: 5px;
-    width: max-content;
-    align-self: center;
-    font-size: 1.2rem;
-    background-color: white;
-    cursor: pointer;
-    border-radius: 20px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border: none;
-}
-
-.alphabetical-range:hover {
-    background-color: rgb(128, 193, 151);
-}
-
 #list {
     display: flex;
     flex-direction: column;
@@ -200,7 +170,7 @@
         display: flex;
         flex-wrap: wrap;
         width: 100vw;
-        padding-bottom: 50px;
+        height: max-content;
         border-bottom: 2px solid rgb(42, 72, 34);
         overflow: hidden;
     }
@@ -214,10 +184,18 @@
     }
 
     #list {
-        width: 100%;
+        display: flex;
+        flex-direction: row;
+        overflow-x: scroll;
+        height: max-content;
     }
 
     #park-and-info {
-        width: 90%;
+        width: 100vw;
+        padding-right: 50px;
+    }
+
+    #park-and-info:nth-of-type(1) {
+        margin-top: 0;
     }
 }

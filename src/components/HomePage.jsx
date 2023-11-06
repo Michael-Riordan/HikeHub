@@ -197,7 +197,6 @@ export default function HomePage() {
         <section id='homepage-body'>
             <SlideShow images={images}/>
             <section id='homepage-info-section'>
-                <h1 id='homepage-info-header'>Discover Your Next Destination</h1>
                 <section id='map-section'>
                     { 
                     userLocation != null && allParkCoordinates.length > 0 && allNationalParks.length > 0 ?

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Map, {Marker, Popup} from 'react-map-gl';
 import treeIcon from '../assets/tree-svgrepo-com.svg';
+import pin from '../assets/pin-svgrepo-com.svg';
 import noImageIcon from '../assets/no-image-icon.jpg';
 import AdventureAutocomplete from "./AdventureAutocomplete";
 import StateAutocomplete from "./StateAutocomplete";
@@ -276,7 +277,7 @@ export default function HomepageMap({coordinates, parks}) {
                                     onClick={() => setSelectedMarker(coords)}
                                     >
                                     <img
-                                        src={treeIcon}
+                                        src={pin}
                                         style={{
                                             width: '25px',
                                             height: '25px',

@@ -36,7 +36,7 @@ export default function HomePage() {
                     longitude: position.coords.longitude,
                 };
                 setUserLocation(location);
-                sessionStorage.setItem('userLocation', JSON.stringify(location));
+                //sessionStorage.setItem('userLocation', JSON.stringify(location));
             })
         } else {
             console.log('Geolocation not available');
@@ -56,9 +56,9 @@ export default function HomePage() {
                 sessionStorage.setItem('userState', state);
             }
             fetchLocation();
-        } else {
+        } /*else {
             setUserState(sessionStorage.getItem('userState'));
-        }
+        }*/
 
     }, [userLocation, userState]);
 
@@ -71,7 +71,7 @@ export default function HomePage() {
             const response = await fetch (`https://national-park-application-c44bb8f1d790.herokuapp.com/api/NationalParks${stateCodeQuery}`);
             const jsonResponse = await response.json();
             setNationalParksByArea(jsonResponse.data);
-            sessionStorage.setItem('nationalParks', JSON.stringify(jsonResponse.data));
+            //sessionStorage.setItem('nationalParks', JSON.stringify(jsonResponse.data));
         } 
         
         if (storedNationalParkData && storedNationalParkData.length > 0) {
@@ -158,7 +158,7 @@ export default function HomePage() {
                 })
 
                 setAllParkCoordinates(allParkCoords);
-                sessionStorage.setItem('allParkCoords', JSON.stringify(allParkCoords));
+                //sessionStorage.setItem('allParkCoords', JSON.stringify(allParkCoords));
 
             }
 
@@ -166,15 +166,32 @@ export default function HomePage() {
 
     }, [allNationalParks]);
 
-    useEffect(() => {
+    const checkStorageSizeOfObj = (obj) => {
+        const str = JSON.stringify(obj);
+        const encoder = new TextEncoder();
+        return encoder.encode(str).length;
+    }
+
+    const getTotalSizeInBytes = (arr) => {
+        let totalSize = 0;
+        for (const obj of arr) {
+            totalSize += checkStorageSizeOfObj(obj);
+        }
+
+        console.log(totalSize);
+    }
+
+    /*useEffect(() => {
 
         if (parkCount > totalParks) {
             console.log('setting all parks to session storage');
             sessionStorage.setItem('allParks', JSON.stringify(allNationalParks));
+            getTotalSizeInBytes(allNationalParks);
 
         }
 
     }, [parkCount, totalParks]);
+    */
 
     return (
         <section id='homepage-body'>

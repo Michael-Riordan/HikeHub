@@ -42,7 +42,6 @@ export default function AdventureAutocomplete({ sendActivityToMap }) {
                 options={activities}
                 getOptionLabel={(option) => option.activityName}
                 id='Autocomplete' 
-                sx={{width: '80%'}} 
                 onChange={handleAdventureSelect}
                 renderInput={(params) => 
                     <TextField 

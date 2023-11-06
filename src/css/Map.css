@@ -116,6 +116,7 @@
 #popup-div {
     text-align: center;
     display: grid;
+    width: 15rem;
 }
 
 .mapboxgl-popup-content {
@@ -187,4 +188,36 @@
 #distance {
     margin-top: 0;
     font-size: 1rem;
+}
+
+@media screen and (max-width: 800px) {
+    #map-and-list {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    #filter-and-list-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100vw;
+        padding-bottom: 50px;
+        border-bottom: 2px solid rgb(42, 72, 34);
+        overflow: hidden;
+    }
+
+    #filters-wrapper {
+        width: 100vw;
+    }
+
+    .MuiAutocomplete-root {
+        width: 90vw;
+    }
+
+    #list {
+        width: 100%;
+    }
+
+    #park-and-info {
+        width: 90%;
+    }
 }

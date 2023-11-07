@@ -147,6 +147,7 @@
 
 #popup-link-park {
     font-size: 1rem;
+    align-self: center;
 }
 
 #duration {
@@ -192,10 +193,68 @@
 
     #park-and-info {
         width: 100vw;
-        padding-right: 50px;
+        height: max-content;
+        border-radius: 10px;
+    }
+
+    .park-name {
+        width: 100px;
+        padding-right: 10px;
+    }
+
+    .park-image-loaded {
+        height: 100px;
+        width: 120px;
     }
 
     #park-and-info:nth-of-type(1) {
         margin-top: 0;
+    }
+
+    #popup-div {
+        width: 180px;
+        height: max-content;
+    }
+
+    .popup-div.national-park {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 40vw;
+    }
+
+    #popup-park-name {
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+
+    #popup-park-name-park {
+        font-size: .6rem;
+        text-align: center;
+        margin-bottom: 0;
+    }
+
+    #popup-park-image-park {
+        width: 100%;
+        height: 100%;
+    }
+
+    #popup-link {
+        font-size: .8rem;
+    }
+
+    #popup-link-park {
+        font-size: .56rem;
+    }
+
+    #duration {
+        font-size: .56rem;
+        text-align: center;
+    }
+
+    #distance {
+        font-size: .56rem;
+        text-align: center;
+        margin-bottom: 0;
     }
 }

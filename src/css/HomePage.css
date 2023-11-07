@@ -60,6 +60,7 @@
 
 #homepage-info-section {
     border-top: 2px solid rgb(42, 72, 34);
+    padding-top: 10px;
 }
 
 #map-section {
@@ -113,6 +114,10 @@
     }
 
     .homepage-header-section {
-        height: 30vh;
+        height: 40vh;
+    }
+
+    .loading-circle {
+        margin-top: 50%;
     }
 }

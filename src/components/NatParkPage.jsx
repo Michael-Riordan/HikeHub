@@ -88,10 +88,9 @@ export default function NatParkPage() {
     return (
         <>
             {
-            userLocation == null || park == null? '' : 
+            park == null? '' : 
             <section id='rec-area-page-body'>
                 <section id='rec-area-map'>
-                        <ImageSlider images={images} id='national-park-page-slider'/>
                         <NationalParkPageMap
                             park={park} 
                             latitude={park[0].latitude}

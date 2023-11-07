@@ -39,7 +39,7 @@ export default function HomePage() {
                 //sessionStorage.setItem('userLocation', JSON.stringify(location));
             })
         } else {
-            console.log('Geolocation not available');
+            setUserLocation('unavailable');
         }
     }, []);
 
@@ -166,40 +166,13 @@ export default function HomePage() {
 
     }, [allNationalParks]);
 
-    const checkStorageSizeOfObj = (obj) => {
-        const str = JSON.stringify(obj);
-        const encoder = new TextEncoder();
-        return encoder.encode(str).length;
-    }
-
-    const getTotalSizeInBytes = (arr) => {
-        let totalSize = 0;
-        for (const obj of arr) {
-            totalSize += checkStorageSizeOfObj(obj);
-        }
-
-        console.log(totalSize);
-    }
-
-    /*useEffect(() => {
-
-        if (parkCount > totalParks) {
-            console.log('setting all parks to session storage');
-            sessionStorage.setItem('allParks', JSON.stringify(allNationalParks));
-            getTotalSizeInBytes(allNationalParks);
-
-        }
-
-    }, [parkCount, totalParks]);
-    */
-
     return (
         <section id='homepage-body'>
             <SlideShow images={images}/>
             <section id='homepage-info-section'>
                 <section id='map-section'>
                     { 
-                    userLocation != null && allParkCoordinates.length > 0 && allNationalParks.length > 0 ?
+                    allParkCoordinates.length > 0 && allNationalParks.length > 0 ?
                         <HomepageMap 
                             coordinates={{userLocation: userLocation, parkCoordinates: allParkCoordinates}}
                             parks={allNationalParks}

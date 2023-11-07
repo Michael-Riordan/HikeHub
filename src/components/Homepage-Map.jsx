@@ -29,6 +29,7 @@ export default function HomepageMap({coordinates, parks}) {
     const allParkCoordinates = coordinates.parkCoordinates;
     const allParks = parks;
     const userLocation = coordinates.userLocation;
+    console.log(userLocation);
 
     const handleActivitySelection = (activities) => {
         setSelectedActivities(activities);

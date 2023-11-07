@@ -17,6 +17,7 @@ export default function NationalParkPageMap(coordinates) {
 
     const visitorCenters = coordinates.visitorCenters;
     const park = coordinates.park[0];
+    console.log(coordinates.userLocation);
 
     const isPlural = (num) => {
         return num > 1;
@@ -49,8 +50,14 @@ export default function NationalParkPageMap(coordinates) {
     }
 
     useEffect(() => {
-        const userLongitude = coordinates.userLocation.longitude;
-        const userLatitude = coordinates.userLocation.latitude;
+        
+        let userLongitude;
+        let userLatitude;
+
+        if (coordinates.userLocation != null) {
+            userLongitude = coordinates.userLocation.longitude;
+            userLatitude = coordinates.userLocation.latitude;
+        }
 
         const fetchDirections = async () => {
             let visitorCenterCoords;
@@ -68,7 +75,8 @@ export default function NationalParkPageMap(coordinates) {
             }
         };
         
-        if (visitorCenters.length > 0) {
+        if (visitorCenters.length > 0 && coordinates.userLocation != null) {
+            console.log('fetching directions', coordinates.userLocation);
             fetchDirections();
         }
 
@@ -78,10 +86,10 @@ export default function NationalParkPageMap(coordinates) {
         <>
             <Map
                 initialViewState={viewport}
-                style={{width: '50vw', height: '50vh',}}
+                style={{width: '100vw', height: '60vh',}}
                 mapStyle={'mapbox://styles/michaeljriordan/clmf3bjbc015j01r63fxg8ezj'}
                 mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
-            > 
+            >
                 <Source
                     type='geojson'
                     data={coordinates.geojson.geometry}
@@ -145,7 +153,7 @@ export default function NationalParkPageMap(coordinates) {
                                 <img 
                                     src={cabin}
                                     style={{
-                                        width: '25px',
+                                        width: '20px',
                                         height: '25px',
                                         cursor: 'pointer',
                                     }}
@@ -164,20 +172,24 @@ export default function NationalParkPageMap(coordinates) {
                         onClose={() => setMarkerSelected(null)}
                     >
                         <div 
-                            id='popup-div'
+                            className='popup-div national-park'
                         >
                             <img 
                                 id='popup-park-image-park' 
                                 src={markerSelected.images.length === 0 ? coordinates.parkImage : markerSelected.images[0].url} 
                             />
                             <h3 id='popup-park-name-park'>{markerSelected.fullName != undefined ? markerSelected.fullName : markerSelected.name}</h3>
-                            <a 
-                                href={`https://www.google.com/maps/dir/${coordinates.userLocation.latitude}, ${coordinates.userLocation.longitude}/${coordinates.latitude}, ${coordinates.longitude}`}
-                                target='_blank'
-                                id='popup-link-park'
-                            >
-                                Get Directions
-                            </a>
+                            {
+                                coordinates.userLocation && (
+                                    <a 
+                                        href={`https://www.google.com/maps/dir/${coordinates.userLocation.latitude}, ${coordinates.userLocation.longitude}/${coordinates.latitude}, ${coordinates.longitude}`}
+                                        target='_blank'
+                                        id='popup-link-park'
+                                    >
+                                        Get Directions
+                                    </a>
+                                )
+                            }
                             {
                                 routeGeojson && (
                                     <>

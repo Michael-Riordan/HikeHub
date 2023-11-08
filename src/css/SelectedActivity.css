@@ -10,3 +10,9 @@
 #activities-header {
     margin-left: 20px;
 }
+
+@media screen and (max-width: 800px) {
+    .activity-info {
+        padding-right: 15px;
+    }
+}

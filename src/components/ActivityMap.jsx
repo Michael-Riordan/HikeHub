@@ -46,13 +46,16 @@ export default function ActivityMap({coords}) {
                             <div id='popup-div'>
                                 <img id='popup-park-image' src={coords.image} />
                                 <h3 id='popup-park-name'>{coords.name}</h3>
-                                <a 
-                                    href={`https://www.google.com/maps/dir/${coords.userLocation.latitude}, ${coords.userLocation.longitude}/${directionsPointer}`}
-                                    target='_blank'
-                                    id='popup-link'
-                                >
-                                    Get Directions
-                                </a>
+                                { coords.userLocation && (
+                                    <a 
+                                        href={`https://www.google.com/maps/dir/${coords.userLocation.latitude}, ${coords.userLocation.longitude}/${directionsPointer}`}
+                                        target='_blank'
+                                        id='popup-link'
+                                    >
+                                        Get Directions
+                                    </a>
+                                )
+                                }
                             </div>
                         </Popup>
                     )

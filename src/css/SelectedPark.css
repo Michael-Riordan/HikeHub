@@ -126,6 +126,12 @@
 }
 
 @media screen and (max-width: 800px) {
+
+    .park-activities-section {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
     #rec-area-map {
         display: flex;
         flex-direction: column;
@@ -139,21 +145,30 @@
         width: 100%;
     }
 
+    #activities-wrapper {
+        padding-right: 0;
+        padding-left: 10px;
+    }
+
     #activity-name-and-list {
         width: 100vw;
     }
 
     .activity-list {
-        width: 300px;
+        max-width: 90%;
     }
 
     #activity-wrapper {
-        width: 300px;
+        width: 100vw;
     }
 
     #activity-name {
         width: 15rem;
         text-align: center;
+    }
+
+    #activity {
+        width: 90%;
     }
 
     .activity-image {

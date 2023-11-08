@@ -189,6 +189,7 @@
         flex-direction: row;
         overflow-x: scroll;
         height: max-content;
+        margin-bottom: 20px;
     }
 
     #park-and-info {

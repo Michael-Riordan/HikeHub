@@ -94,6 +94,42 @@
     transform: rotate(2000deg);
 }
 
+#loading-text-wrapper {
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#loading-text {
+    margin-top: 50px;
+    margin-right: 5%;
+    align-self: center;
+    overflow: hidden;
+    font-size: 2rem;
+}
+
+#loading-dots {
+    display: inline-block;
+    width: 0;
+    animation: typing 1s infinite;
+}
+
+@keyframes typing {
+    0% {
+        width: 0;
+    }
+
+    50% {
+        width: 29px;
+    }
+
+    100% {
+        width: 0;
+    }
+}
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);
@@ -118,6 +154,25 @@
     }
 
     .loading-circle {
-        margin-top: 50%;
+        margin-left: 35vw;
+        margin-top: 25vh;
+    }
+
+    #loading-text {
+        font-size: 1rem;
+    }
+
+    @keyframes typing {
+        0% {
+            width: 0;
+        }
+
+        50% {
+            width: 15px;
+        }
+
+        100% {
+            width: 0;
+        }
     }
 }

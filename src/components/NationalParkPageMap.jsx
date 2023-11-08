@@ -17,7 +17,6 @@ export default function NationalParkPageMap(coordinates) {
 
     const visitorCenters = coordinates.visitorCenters;
     const park = coordinates.park[0];
-    console.log(coordinates.userLocation);
 
     const isPlural = (num) => {
         return num > 1;
@@ -76,7 +75,6 @@ export default function NationalParkPageMap(coordinates) {
         };
         
         if (visitorCenters.length > 0 && coordinates.userLocation != null) {
-            console.log('fetching directions', coordinates.userLocation);
             fetchDirections();
         }
 

@@ -171,16 +171,23 @@ export default function HomePage() {
             <SlideShow images={images}/>
             <section id='homepage-info-section'>
                 <section id='map-section'>
-                    { 
+                    {
                     allParkCoordinates.length > 0 && allNationalParks.length > 0 ?
                         <HomepageMap 
                             coordinates={{userLocation: userLocation, parkCoordinates: allParkCoordinates}}
                             parks={allNationalParks}
                         />
                         :
-                        <div className='loading-circle'>
-                            <div className='circle-inner' />
-                        </div>
+                        <>
+                            <div className='loading-circle'>
+                                <div className='circle-inner' />
+                            </div>
+                            <div id='loading-text-wrapper'>
+                                <p id='loading-text'>
+                                    Loading<span id='loading-dots'>...</span>
+                                </p>
+                            </div>
+                        </>
                     }
                     
                 </section>

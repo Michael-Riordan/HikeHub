@@ -143,11 +143,14 @@
 
 #popup-park-name-park {
     font-size: 1.1rem;
+    text-align: center;
 }
 
 #popup-link-park {
+    display: block;
     font-size: 1rem;
-    align-self: center;
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 #duration {
@@ -218,7 +221,6 @@
     }
 
     .popup-div.national-park {
-        display: flex;
         flex-direction: column;
         align-items: center;
         width: 40vw;
@@ -246,6 +248,8 @@
 
     #popup-link-park {
         font-size: .56rem;
+        justify-self: center;
+        align-self: center;
     }
 
     #duration {

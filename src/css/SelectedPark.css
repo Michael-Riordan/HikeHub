@@ -87,7 +87,7 @@
 .activity-list {
     display: flex;
     flex-direction: row;
-    max-width: calc(100vw - 100px);
+    max-width: calc(100vw - 2vw);
     height: max-content;
     overflow-x: auto;
     margin-bottom: 20px;

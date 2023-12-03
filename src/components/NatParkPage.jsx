@@ -1,20 +1,17 @@
 import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ImageSlider from "./ImageSlider";
 import NationalParkPageMap from "./NationalParkPageMap";
 
 export default function NatParkPage() {
     const [geoJsonCoordinates, setGeoJsonCoordinates] = useState([]);
     const [images, setImages] = useState([]);
     const [groupedActivities, setGroupedActivities] = useState(null);
-    const [keys, setKeys] = useState([]);
+    const [activityNames, setActivityNames] = useState([]);
     const [visitorCenters, setVisitorCenters] = useState([]);
-
     const location = useLocation();
     const park = location.state.selectedPark;
     const userLocation = location.state.userLocation;
-    
     
     useEffect(() => {
 
@@ -65,7 +62,7 @@ export default function NatParkPage() {
             })
 
             setGroupedActivities(activitiesObject);
-            setKeys(Object.keys(activitiesObject));
+            setActivityNames(Object.keys(activitiesObject));
         }
         
         fetchThingsToDo();
@@ -83,7 +80,7 @@ export default function NatParkPage() {
 
         fetchVisitorCenters();
 
-    }, [park])
+    }, [park]);
 
     return (
         <>
@@ -114,49 +111,45 @@ export default function NatParkPage() {
                         <ul id='activities-wrapper'>
                             {
                                 groupedActivities ?
-                                keys.map((key) => {
-                                    const activityList = groupedActivities[key];
+                                activityNames.map((name) => {
                                     return (
-                                        
-                                        <div id='activity-name-and-list' key={key}>
-                                            <h2 id='activity'>{key}</h2>
+                                        <div id='activity-name-and-list' name={name}>
+                                            <h2 id='activity'>{name}</h2>
                                             <div className='activity-list'>
-                                                    {
-                                                        activityList.map((activity) => {
-                                                            return (
-                                        
-                                                                <Link 
-                                                                    key={activity.name} 
-                                                                    id='activity-wrapper' 
-                                                                    to='/SelectedActivity' 
-                                                                    state={
-                                                                        {
-                                                                            activityName: activity.name, 
-                                                                            latitude: activity.coords.lat, 
-                                                                            longitude: activity.coords.lng, 
-                                                                            image: activity.image,
-                                                                            userLocation: userLocation,
-                                                                            parkAddress: park[0].addresses[0],
-                                                                            parkLatLng: {lat: park[0].latitude, lng: park[0].longitude},
-                                                                            activityObj: activity.activityObj,
-                                                                        }
+                                                {groupedActivities[name].map(activity => {
+                                                    return (
+                                                        <>
+                                                            <Link 
+                                                                key={activity.name} 
+                                                                id='activity-wrapper' 
+                                                                to='/SelectedActivity'
+                                                                state={
+                                                                    {
+                                                                        activityName: activity.name, 
+                                                                        latitude: activity.coords.lat, 
+                                                                        longitude: activity.coords.lng, 
+                                                                        image: activity.image,
+                                                                        userLocation: userLocation,
+                                                                        parkAddress: park[0].addresses[0],
+                                                                        parkLatLng: {lat: park[0].latitude, lng: park[0].longitude},
+                                                                        activityObj: activity.activityObj,
                                                                     }
-                                                                >
-                                                                    <h1 id='activity-name'>
-                                                                        {activity.name}
-                                                                    </h1>
-                                                                    <img 
-                                                                        className='activity-image' 
-                                                                        src={activity.image} 
-                                                                    />
-                                                                    <p id='activity-description'>
-                                                                        {activity.description}
-                                                                    </p>
-                                                                </Link>
-
-                                                            );
-                                                        })
-                                                    }
+                                                                }
+                                                            >
+                                                                <h1 id='activity-name'>
+                                                                    {activity.name}
+                                                                </h1>
+                                                                <img 
+                                                                    className='activity-image' 
+                                                                    src={activity.image} 
+                                                                />
+                                                                <p id='activity-description'>
+                                                                    {activity.description}
+                                                                </p>
+                                                            </Link>
+                                                        </>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
                                     );

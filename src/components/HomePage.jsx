@@ -9,34 +9,38 @@ export default function HomePage() {
     const [userLocation, setUserLocation] = useState(null);
     const [userState, setUserState] = useState(null);
     const [allNationalParks, setAllNationalParks] = useState([]);
-    const [nationalParksByArea, setNationalParksByArea] = useState([]);
-    const [dataFetched, setDataFetched] = useState(false);
     const [totalParks, setTotalParks] = useState(0);
     const [parkCount, setParkCount] = useState(0);
     const [allParkCoordinates, setAllParkCoordinates] = useState([]);
 
     //useRef below prevents useEffect with parkCount dependency to fetch on initial render- 
     const isFirstRender = useRef(true);
-
+    
     const images = [
         HikingTrail1,
         HikingTrail2,
         HikingTrail3,
     ];
-
+    
+    const fetchAllParks = async () => {
+    
+        const countQuery = `?startCount=${parkCount}`;
+        const response = await fetch(`https://national-park-application-c44bb8f1d790.herokuapp.com/api/AllNationalParks${countQuery}`);
+        const jsonResponse = await response.json();
+        setParkCount((prevCount) => Number(prevCount) + Number(jsonResponse.limit));
+        setTotalParks(Number(jsonResponse.total));
+        setAllNationalParks((prevResponse)=> [...prevResponse, ...jsonResponse.data]);
+    };
+    
     useEffect(() => {
-        const storedLocation = JSON.parse(sessionStorage.getItem('userLocation'));
-
-        if (storedLocation != null) {
-            setUserLocation(storedLocation);
-        } else if ('geolocation' in navigator) {
+        
+        if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 const location = {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                 };
                 setUserLocation(location);
-                //sessionStorage.setItem('userLocation', JSON.stringify(location));
             })
         } else {
             setUserLocation('unavailable');
@@ -53,46 +57,11 @@ export default function HomePage() {
                 const jsonResult = await result.json();
                 const state = jsonResult.plus_code.compound_code.split(' ')[2].replace(',', '');
                 setUserState(state);
-                sessionStorage.setItem('userState', state);
             }
             fetchLocation();
-        } /*else {
-            setUserState(sessionStorage.getItem('userState'));
-        }*/
-
-    }, [userLocation, userState]);
-
-    useEffect(() => {
-        const storedNationalParkData = JSON.parse(sessionStorage.getItem('nationalParks'));
-        
-        //fetches national parks by state code
-        const fetchNationalParks = async () => {
-            const stateCodeQuery = `?stateCode=${userState}`
-            const response = await fetch (`https://national-park-application-c44bb8f1d790.herokuapp.com/api/NationalParks${stateCodeQuery}`);
-            const jsonResponse = await response.json();
-            setNationalParksByArea(jsonResponse.data);
-            //sessionStorage.setItem('nationalParks', JSON.stringify(jsonResponse.data));
-        } 
-        
-        if (storedNationalParkData && storedNationalParkData.length > 0) {
-            setNationalParksByArea(storedNationalParkData);
-            setDataFetched(true);
-        } else if (!dataFetched) {
-            fetchNationalParks();
         }
 
-    }, [userState, dataFetched]);
-
-    const fetchAllParks = async () => {
-
-        const countQuery = `?startCount=${parkCount}`;
-        const response = await fetch(`https://national-park-application-c44bb8f1d790.herokuapp.com/api/AllNationalParks${countQuery}`);
-        const jsonResponse = await response.json();
-        setParkCount((prevCount) => Number(prevCount) + Number(jsonResponse.limit));
-        setTotalParks(Number(jsonResponse.total));
-        setAllNationalParks((prevResponse)=> [...prevResponse, ...jsonResponse.data]);
-
-    }
+    }, [userLocation, userState]);
 
     useEffect(() => {
         /*
@@ -139,31 +108,18 @@ export default function HomePage() {
     }, [parkCount, totalParks]);
 
     useEffect(() => {
-        const allParkCoordsCache = sessionStorage.getItem('allParkCoords');
-
-        if (allParkCoordsCache) {
-            const parsedParkCoordsCache = JSON.parse(allParkCoordsCache);
-            setAllParkCoordinates(parsedParkCoordsCache);
-        } else {
-
-            const allParkCoords = [];
-            if (allNationalParks.length === totalParks && totalParks !== 0) {
-                let parkURL;
-                allNationalParks.forEach(park => {
-                    if (park.images.length > 0) {
-                        parkURL = park.images[0].url;
-                    }
-                    const parkCoords = {parkName: park.fullName, latitude: park.latitude, longitude: park.longitude, parkImage: parkURL,}
-                    allParkCoords.push(parkCoords);
-                })
-
-                setAllParkCoordinates(allParkCoords);
-                //sessionStorage.setItem('allParkCoords', JSON.stringify(allParkCoords));
-
-            }
-
+        const allParkCoords = [];
+        if (allNationalParks.length === totalParks && totalParks !== 0) {
+            let parkURL;
+            allNationalParks.forEach(park => {
+                if (park.images.length > 0) {
+                    parkURL = park.images[0].url;
+                }
+                const parkCoords = {parkName: park.fullName, latitude: park.latitude, longitude: park.longitude, parkImage: parkURL,}
+                allParkCoords.push(parkCoords);
+            })
+            setAllParkCoordinates(allParkCoords);
         }
-
     }, [allNationalParks]);
 
     return (

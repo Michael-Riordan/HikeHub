@@ -13,8 +13,7 @@ export default function HomePage() {
     const [parkCount, setParkCount] = useState(0);
     const [allParkCoordinates, setAllParkCoordinates] = useState([]);
     const dbName = 'WanderAmericaDB';
-    const dbVersion = 5;
-
+    const dbVersion = 19;
     //useRef below prevents useEffect with parkCount dependency to fetch on initial render- 
     const isFirstRender = useRef(true);
     
@@ -84,44 +83,66 @@ export default function HomePage() {
         
         request.onsuccess = (event) => {
             const db = event.target.result;
-            const transaction = db.transaction(['AllParks'], 'readwrite');
-            const store = transaction.objectStore('AllParks');
-            const getRequest = store.get(1);
-
-            getRequest.onsuccess = (event) => {
-                setAllNationalParks(event.target.result.object);
-            };
-
-            getRequest.onerror = (event) => {
-                console.error('Error getting indexedDB database:', event.target.error);
-            }
-
-            getRequest.oncomplete = (event) => {
-                db.close();
-            }
-        }
-
-
-        if (allNationalParks.length === 0) {
-            switch (import.meta.env.VITE_NODE_ENV) {
-                case ('development'):
-                    if (!isFirstRender.current) {
+            if (!db.objectStoreNames.contains('AllParks')) {
+                switch (import.meta.env.VITE_NODE_ENV) {
+                    case ('development'):
+                        if (!isFirstRender.current) {
+                            if (parkCount < totalParks || totalParks === 0) {
+                                console.log('calling');
+                                fetchAllParks();
+                            }
+                        } else {
+                            isFirstRender.current = false;
+                        }
+                        break;
+                            
+                    case ('production'): 
                         if (parkCount < totalParks || totalParks === 0) {
                             console.log('calling');
-                            fetchAllParks();
+                            fetchAllParks();                    
                         }
-                    } else {
-                        isFirstRender.current = false;
-                    }
-                    break;
-                    
-                case ('production'): 
-                    if (parkCount < totalParks || totalParks === 0) {
-                        console.log('calling');
-                        fetchAllParks();                    
-                    }
-                    break;
-            }
+                        break;
+                }
+            } else {
+                console.log(db.objectStoreNames.contains('AllParks'))
+                const transaction = db.transaction(['AllParks'], 'readwrite');
+                const store = transaction.objectStore('AllParks');
+                const getParks = store.get(1);
+
+                getParks.onsuccess = (event) => {
+                    console.log(event.target);
+                    setAllNationalParks(event.target.result.object);
+                };
+    
+                getParks.onerror = (event) => {
+                    console.error('Error getting parks:', event.target.error);
+                }
+
+                const getCoords = store.get(2);
+                
+                getCoords.onsuccess = (event) => {
+                    console.log(event.target)
+                    setAllParkCoordinates(event.target.result.object)
+                }
+
+                getCoords.onerror = (event) => {
+                    console.error('Error getting park coords:', event.target.error)
+                }
+
+                getCoords.oncomplete = (event) => {
+                    db.close();
+                }
+
+            }   
+        }
+
+        request.onerror = (event) => {
+            console.error('DB error:', event.target.error);
+        }
+
+        request.oncomplete = (event) => {
+            const db = event.target.result;
+            db.close();
         }
 
     }, [parkCount, totalParks]);
@@ -138,6 +159,42 @@ export default function HomePage() {
                 allParkCoords.push(parkCoords);
             })
             setAllParkCoordinates(allParkCoords);
+            const request = indexedDB.open(dbName, dbVersion);
+
+            request.onupgradeneeded = (event) => {
+                console.log('upgradeNeeded')
+                const db = event.target.result;
+                const storeName = 'AllParks';
+                if (!db.objectStoreNames.contains(storeName)) {
+                    console.log('creating store')
+                    db.createObjectStore(storeName, {keyPath: 'id', autoIncrement: true});
+                }
+            }
+
+            request.onsuccess = (event) => {
+                const db = event.target.result;
+                transaction = db.transaction(['AllParks'], 'readwrite');
+                const store = transaction.objectStore('AllParks');
+                const result = store.get(2);
+
+                if (!result.object) {
+                    console.log('hello');
+                    const allParkCoords = { id: 2, name: 'parkCoordsObj', object: allParkCoordinates};
+                    const addRequest = store.add(allParkCoords);
+
+                    addRequest.onsuccess = (event) => {
+                        console.log('successfully added coords to db', event.target.result);
+                    }
+
+                    addRequest.onerror = (event) => {
+                        console.error('Error adding all coords to db:', event.target.error);
+                    }
+
+                    addRequest.oncomplete = (event) => {
+                        db.close();
+                    }
+                }
+            }
         }
     }, [allNationalParks]);
 
@@ -150,8 +207,9 @@ export default function HomePage() {
             request.onerror = (event) => {
                 console.log('Database error:', event.target.errorCode);
             }
-
+            
             request.onupgradeneeded = (event) => {
+                console.log('upgradeNeeded')
                 const db = event.target.result;
                 const storeName = 'AllParks';
                 if (!db.objectStoreNames.contains(storeName)) {
@@ -207,7 +265,7 @@ export default function HomePage() {
             <section id='homepage-info-section'>
                 <section id='map-section'>
                     {
-                    allParkCoordinates.length > 0 && allNationalParks.length > 0 ?
+                    allNationalParks.length > 0 && allParkCoordinates.length > 0 ?
                         <HomepageMap 
                             coordinates={{userLocation: userLocation, parkCoordinates: allParkCoordinates}}
                             parks={allNationalParks}

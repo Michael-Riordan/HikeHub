@@ -12,6 +12,8 @@ export default function HomePage() {
     const [totalParks, setTotalParks] = useState(0);
     const [parkCount, setParkCount] = useState(0);
     const [allParkCoordinates, setAllParkCoordinates] = useState([]);
+    const dbName = 'WanderAmericaDB';
+    const dbVersion = 5;
 
     //useRef below prevents useEffect with parkCount dependency to fetch on initial render- 
     const isFirstRender = useRef(true);
@@ -65,25 +67,42 @@ export default function HomePage() {
 
     useEffect(() => {
         /*
-            Prevent the initial double call to fetchAllParks during development:
+            To prevent the initial double call to fetchAllParks in development env:
             - During the initial mount, parkCount is initialized with 0 by useState.
             - Without the isFirstRender ref, the useEffect would run fetchAllParks
             twice on initial mount with parkCount at 0, resulting in duplicate objects.
-            (<React.StrictMode> invokes render method twice in development)
+            (Reasoning: <React.StrictMode> invokes render method twice in development)
         */
+        /* 
+            the below switch statements take into account that in a development environment
+            react will render the page twice on the initial mount (due to <React.StrictMode>)
+            *production only renders once on initial mount*
+        */
+        
+        //checking for all parks in indexedDB database -
+        const request = indexedDB.open(dbName, dbVersion);
+        
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction(['AllParks'], 'readwrite');
+            const store = transaction.objectStore('AllParks');
+            const getRequest = store.get(1);
 
-        const cachedAllParks = sessionStorage.getItem('allParks');
+            getRequest.onsuccess = (event) => {
+                setAllNationalParks(event.target.result.object);
+            };
 
-        if (cachedAllParks && JSON.parse(cachedAllParks).length > 0) {
+            getRequest.onerror = (event) => {
+                console.error('Error getting indexedDB database:', event.target.error);
+            }
 
-            const parsedAllParks = JSON.parse(cachedAllParks);
-            setAllNationalParks(parsedAllParks)
+            getRequest.oncomplete = (event) => {
+                db.close();
+            }
+        }
 
-        } else {
-            /* 
-                the below switch statements take into account that in a development environment
-                react will render the page twice on the initial mount (due to <React.StrictMode>)
-            */
+
+        if (allNationalParks.length === 0) {
             switch (import.meta.env.VITE_NODE_ENV) {
                 case ('development'):
                     if (!isFirstRender.current) {
@@ -95,11 +114,11 @@ export default function HomePage() {
                         isFirstRender.current = false;
                     }
                     break;
-                
+                    
                 case ('production'): 
                     if (parkCount < totalParks || totalParks === 0) {
                         console.log('calling');
-                        fetchAllParks();
+                        fetchAllParks();                    
                     }
                     break;
             }
@@ -122,6 +141,66 @@ export default function HomePage() {
         }
     }, [allNationalParks]);
 
+    useEffect(() => {
+        //Working with indexedDB to cache all parks to avoid re-calling parks api on load screen
+
+        if (allNationalParks.length === totalParks && totalParks !== 0) {
+            const request = indexedDB.open(dbName, dbVersion);
+
+            request.onerror = (event) => {
+                console.log('Database error:', event.target.errorCode);
+            }
+
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                const storeName = 'AllParks';
+                if (!db.objectStoreNames.contains(storeName)) {
+                    console.log('creating store')
+                    db.createObjectStore(storeName, {keyPath: 'id', autoIncrement: true});
+                }
+            }
+            
+            request.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction(['AllParks'], 'readwrite');
+                const store = transaction.objectStore('AllParks');
+                const result = store.get(1);
+                
+                if (!result.object) {
+                    const allParks = { id: 1, name: 'parksObject', object: allNationalParks};
+                    const addRequest = store.add(allParks);
+    
+                    addRequest.onerror = (event) => {
+                        addRequest.oncomplete = (event) => {
+                            db.close();
+                        }
+    
+                        if (event.target.error.message === 'Key already exists in the object store.') {
+    
+                            return;
+    
+                        } else {
+    
+                            console.error('Error adding parks to DB:', event.target.error);
+    
+                        }
+                    }
+                    
+                    addRequest.onsuccess = (event) => {
+    
+                        console.log('Successfully added all parks to DB');
+    
+                    }
+    
+                    addRequest.oncomplete = (event) => {
+                        db.close();
+                    }
+                }
+            }
+        }
+
+    }, [allNationalParks, totalParks]);
+
     return (
         <section id='homepage-body'>
             <SlideShow images={images}/>
@@ -140,7 +219,7 @@ export default function HomePage() {
                             </div>
                             <div id='loading-text-wrapper'>
                                 <p id='loading-text'>
-                                    Loading<span id='loading-dots'>...</span>
+                                    Loading Map<span id='loading-dots'>...</span>
                                 </p>
                             </div>
                         </>

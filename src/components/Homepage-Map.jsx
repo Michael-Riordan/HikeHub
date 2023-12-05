@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Map, {Marker, Popup} from 'react-map-gl';
-import treeIcon from '../assets/tree-svgrepo-com.svg';
 import pin from '../assets/pin-svgrepo-com.svg';
 import noImageIcon from '../assets/no-image-icon.jpg';
 import AdventureAutocomplete from "./AdventureAutocomplete";
@@ -233,21 +232,23 @@ export default function HomepageMap({coordinates, parks}) {
                             image = noImageIcon;
 
                             return (
-                                <>
-                                    <Link 
-                                        key={park.fullName} 
-                                        id='park-and-info' 
-                                        to='/NatParkPage' 
-                                        state={{selectedPark: [park], userLocation: userLocation, parkImage: image}}
-                                    >
-                                        <img 
-                                            className={'park-image-loaded'}
-                                            src={image}
-                                            alt={park.images.length > 0 ? park.images[0].altText : 'No Image Available'}
-                                        />
-                                        <h2 className='park-name'>{park.fullName}</h2>
-                                    </Link>
-                                </>
+                                <Link 
+                                    key={park.fullName} 
+                                    id='park-and-info' 
+                                    to='/NatParkPage' 
+                                    state={{selectedPark: [park], userLocation: userLocation, parkImage: image}}
+                                >
+                                    <img 
+                                        className={'park-image-loaded'}
+                                        src={image}
+                                        alt={park.images.length > 0 ? park.images[0].altText : 'No Image Available'}
+                                        onError={(e) => {
+                                            e.target.onError = null;
+                                            e.target.src = noImageIcon;
+                                        }}
+                                    />
+                                    <h2 className='park-name'>{park.fullName}</h2>
+                                </Link>
                             );
                         })
                     }
@@ -258,7 +259,6 @@ export default function HomepageMap({coordinates, parks}) {
                 mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
                 style={{width: '100%', height: '600px',}}
                 mapStyle={'mapbox://styles/michaeljriordan/clmf3bjbc015j01r63fxg8ezj'}
-                
             >
                 {
                     filteredParkCoordinates.map((coords) => {

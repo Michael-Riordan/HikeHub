@@ -4,11 +4,6 @@
 }
 
 @font-face {
-  font-family: 'DMSerif';
-  src: url('./assets/DMSerifDisplay-Italic.ttf')
-}
-
-@font-face {
   font-family: 'DMSerifReg';
   src: url('./assets/DMSerifDisplay-Regular.ttf');
 }

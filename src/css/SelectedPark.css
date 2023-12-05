@@ -16,7 +16,7 @@
 
 .park-page-name {
     color: rgb(42, 72, 34);
-    font-size: 1.2rem;
+    font-size: 2rem;
     margin: 20px;
     margin-bottom: 0;
     text-align: left;
@@ -48,7 +48,7 @@
 
 #activities-header {
     color: rgb(42, 72, 34);
-    font-size: 1.2rem;
+    font-size: 2rem;
     font-family: 'DMSerifReg';
     text-align: center;
 }
@@ -57,6 +57,7 @@
     color: rgb(42, 72, 34);
     font-family: 'DMSerifReg';
     font-size: 1.2rem;
+    text-decoration: underline;
 }
 
 .park-page-name-and-description-wrapper {
@@ -69,6 +70,7 @@
     text-indent: 10px;
     color: rgb(42, 72, 34);
     text-align: left;
+    font-size: 1.2rem;
 }
 
 .activity-image {

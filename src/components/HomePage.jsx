@@ -45,12 +45,12 @@ export default function HomePage() {
     const fetchAllParks = async () => {
     
         const countQuery = `?startCount=${parkCount}`;
-        const response = await fetch(`${serverEndPoint}/api/AllNationalParks${countQuery}`);
+        const response = await fetch(`https://national-park-application-c44bb8f1d790.herokuapp.com/api/AllNationalParks${countQuery}`);
         const jsonResponse = await response.json();
         setParkCount((prevCount) => Number(prevCount) + Number(jsonResponse.limit));
         setTotalParks(Number(jsonResponse.total));
         setAllNationalParks((prevResponse)=> [...prevResponse, ...jsonResponse.data]);
-    };
+    }
     
     useEffect(() => {
         

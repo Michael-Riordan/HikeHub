@@ -208,7 +208,7 @@ export default function HomePage() {
                             </div>
                             <div id='loading-text-wrapper'>
                                 <p id='loading-text'>
-                                    Loading Map<span id='loading-dots'>...</span>
+                                    Getting map ready<span id='loading-dots'>...</span>
                                 </p>
                             </div>
                         </>

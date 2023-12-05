@@ -16,11 +16,10 @@
 
 .park-page-name {
     color: rgb(42, 72, 34);
-    font-size: 2rem;
+    font-size: 1.2rem;
     margin: 20px;
     margin-bottom: 0;
     text-align: left;
-    text-decoration: underline;
     font-family: 'DMSerifReg';
 }
 
@@ -29,6 +28,7 @@
     flex-direction: column;
     width: 100vw;
     font-family: 'DMSerifReg';
+    font-size: .9rem;
 }
 
 #park-activities-section {
@@ -48,16 +48,15 @@
 
 #activities-header {
     color: rgb(42, 72, 34);
-    font-size: 2rem;
-    text-decoration: underline;
+    font-size: 1.2rem;
     font-family: 'DMSerifReg';
-    text-align: left;
+    text-align: center;
 }
 
 #activity {
     color: rgb(42, 72, 34);
     font-family: 'DMSerifReg';
-    font-size: 2rem;
+    font-size: 1.2rem;
 }
 
 .park-page-name-and-description-wrapper {
@@ -82,6 +81,7 @@
     width: 20vw;
     color: rgb(42, 72, 34);
     text-decoration: none;
+    font-size: .8rem;
 }
 
 .activity-list {
@@ -100,19 +100,24 @@
 
 #activity-name {
     width: 20vw;
-    font-size: 1.3rem;
+    font-size: 1rem;
     color: rgb(42, 72, 34);
+    text-align: center;
+    align-self: center;
 }
 
 #activity-wrapper {
-    display: block;
-    background-color: rgb(175, 205, 166);
+    display: flex;
+    flex-direction: column;
     border-radius: 50px;
     padding: 10px;
     margin: 10px;
     margin-bottom: 20px;
     text-decoration: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.618);
+    text-align: center;
+    height: max-content;
+    justify-items: center;
+    width: 300px;
 }
 
 #activity-wrapper:hover {
@@ -155,10 +160,6 @@
 
     .activity-list {
         max-width: 90%;
-    }
-
-    #activity-wrapper {
-        width: 100vw;
     }
 
     #activity-name {

@@ -9,7 +9,7 @@
     justify-content: center;
 }
 
-#rec-area-page-image {
+.rec-area-page-image {
     width: 50vw;
     height: 50vh;
 }
@@ -140,7 +140,7 @@
         width: 100vw;
     }
 
-    #rec-area-page-image {
+    .rec-area-page-image {
         width: 100%;
     }
 

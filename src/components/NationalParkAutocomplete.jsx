@@ -20,7 +20,7 @@ export default function NationalParkAutocomplete({parks, sendNationalParksToMap 
                 multiple
                 options={parks}
                 getOptionLabel={(parks) => parks.fullName}
-                id='Autocomplete' 
+                className='Autocomplete' 
                 sx={{width: '80%'}} 
                 onChange={handleParkSelection}
                 renderInput={(params) => 
@@ -29,7 +29,7 @@ export default function NationalParkAutocomplete({parks, sendNationalParksToMap 
                     label='Search by Park'
                     hiddenLabel={true} 
                     color='success'
-                    id='autocomplete-textfield' 
+                    className='autocomplete-textfield' 
                     />} 
             />
 }

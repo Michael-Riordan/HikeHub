@@ -19,7 +19,8 @@ export default function ImageSlider({ images }) {
                 <>
                     <img 
                         src={images[currentIndex] != undefined? images[currentIndex] : noImageIcon} 
-                        id='rec-area-page-image' 
+                        className='rec-area-page-image' 
+                        alt='scenic image of hiking trail'
                     />
                 </>
     );

@@ -27,7 +27,7 @@ export default function StateAutocomplete({ sendStateToMap }) {
                 multiple
                 options={usStateCodes}
                 getOptionLabel={(option) => option}
-                id='Autocomplete' 
+                className='Autocomplete' 
                 sx={{width: '80%'}} 
                 onChange={handleStateSelect}
                 renderInput={(params) => 
@@ -36,7 +36,7 @@ export default function StateAutocomplete({ sendStateToMap }) {
                     label='Filter by State'
                     hiddenLabel={true} 
                     color='success'
-                    id='autocomplete-textfield' 
+                    className='autocomplete-textfield' 
                     />} 
             />
 }

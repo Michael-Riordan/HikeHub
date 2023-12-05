@@ -19,14 +19,30 @@ export default function HomePage() {
     const dbVersion = 1;
     //useRef below prevents useEffect with parkCount dependency to fetch on initial render- 
     const isFirstRender = useRef(true);
-
-    fetch(`${serverEndPoint}/api/test`)
     
     const images = [
         HikingTrail1,
         HikingTrail2,
         HikingTrail3,
     ];
+
+    /*
+    useEffect(() => {
+        allNationalParks.forEach(park => {
+            console.log(park.fullName, park.images);
+            fetch(`${serverEndPoint}/api/downloadImages`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.error(error);
+            })
+        })
+    }, [allNationalParks])
+    */
     
     const fetchAllParks = async () => {
     

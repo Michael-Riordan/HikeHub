@@ -28,7 +28,7 @@
     flex-direction: column;
     width: 100vw;
     font-family: 'DMSerifReg';
-    font-size: .9rem;
+    font-size: 1.2rem;
 }
 
 #park-activities-section {
@@ -81,7 +81,7 @@
     width: 20vw;
     color: rgb(42, 72, 34);
     text-decoration: none;
-    font-size: .8rem;
+    font-size: 1rem;
 }
 
 .activity-list {
@@ -117,7 +117,6 @@
     text-align: center;
     height: max-content;
     justify-items: center;
-    width: 300px;
 }
 
 #activity-wrapper:hover {

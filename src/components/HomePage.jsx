@@ -12,9 +12,7 @@ export default function HomePage() {
     const [totalParks, setTotalParks] = useState(0);
     const [parkCount, setParkCount] = useState(0);
     const [allParkCoordinates, setAllParkCoordinates] = useState([]);
-    const serverEndPoint = import.meta.env.VITE_NODE_ENV === 'development' ? 
-        'http://localhost:3000' : 
-        import.meta.env.VITE_HEROKU_ENDPOINT;
+    const serverEndPoint = import.meta.env.VITE_HEROKU_ENDPOINT;
     const dbName = 'IDB';
     const dbVersion = 1;
     //useRef below prevents useEffect with parkCount dependency to fetch on initial render- 

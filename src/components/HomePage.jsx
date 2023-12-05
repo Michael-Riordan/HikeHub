@@ -12,10 +12,15 @@ export default function HomePage() {
     const [totalParks, setTotalParks] = useState(0);
     const [parkCount, setParkCount] = useState(0);
     const [allParkCoordinates, setAllParkCoordinates] = useState([]);
+    const serverEndPoint = import.meta.env.VITE_NODE_ENV === 'development' ? 
+        'http://localhost:3000' : 
+        import.meta.env.VITE_HEROKU_ENDPOINT;
     const dbName = 'IDB';
     const dbVersion = 1;
     //useRef below prevents useEffect with parkCount dependency to fetch on initial render- 
     const isFirstRender = useRef(true);
+
+    fetch(`${serverEndPoint}/api/test`)
     
     const images = [
         HikingTrail1,
@@ -26,7 +31,7 @@ export default function HomePage() {
     const fetchAllParks = async () => {
     
         const countQuery = `?startCount=${parkCount}`;
-        const response = await fetch(`https://national-park-application-c44bb8f1d790.herokuapp.com/api/AllNationalParks${countQuery}`);
+        const response = await fetch(`${serverEndPoint}/api/AllNationalParks${countQuery}`);
         const jsonResponse = await response.json();
         setParkCount((prevCount) => Number(prevCount) + Number(jsonResponse.limit));
         setTotalParks(Number(jsonResponse.total));

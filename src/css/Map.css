@@ -30,7 +30,7 @@
     border-top: 1px solid grey
 }
 
-#park-and-info {
+.park-and-info {
     display: flex;
     align-items: center;
     width: 90%;
@@ -40,11 +40,11 @@
     text-decoration: none;
 }
 
-#park-and-info:nth-of-type(1) {
+.park-and-info:nth-of-type(1) {
     margin-top: 10px;
 }
 
-#park-and-info:hover {
+.park-and-info:hover {
     background-color: rgb(128, 193, 151);
 }
 
@@ -193,9 +193,10 @@
         overflow-x: scroll;
         height: max-content;
         margin-bottom: 20px;
+        padding-left: 10px;
     }
 
-    #park-and-info {
+    .park-and-info {
         width: 100vw;
         height: max-content;
         border-radius: 10px;
@@ -211,7 +212,7 @@
         width: 120px;
     }
 
-    #park-and-info:nth-of-type(1) {
+    .park-and-info:nth-of-type(1) {
         margin-top: 0;
     }
 

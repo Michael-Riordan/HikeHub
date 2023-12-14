@@ -234,7 +234,7 @@ export default function HomepageMap({coordinates, parks}) {
                             return (
                                 <Link 
                                     key={park.fullName} 
-                                    id='park-and-info' 
+                                    className='park-and-info' 
                                     to='/NatParkPage' 
                                     state={{selectedPark: [park], userLocation: userLocation, parkImage: image}}
                                 >

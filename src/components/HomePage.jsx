@@ -23,23 +23,33 @@ export default function HomePage() {
         HikingTrail2,
         HikingTrail3,
     ];
-
+    
     /*
+    below useEffect is used to download park images from API provided url 
+    and place them inside of a folder in the server side application folder
+
     useEffect(() => {
-        allNationalParks.forEach(park => {
-            console.log(park.fullName, park.images);
-            fetch(`${serverEndPoint}/api/downloadImages`, {
+        let urls = [];
+
+        const downloadImages = async (urls) => {  
+            fetch('http://localhost:3000/api/imageDownloader', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ urls: urls}),
             })
-            .then(response => {
-                console.log(response);
-            })
-            .catch(error => {
-                console.error(error);
-            })
-        })
-    }, [allNationalParks])
+        }
+
+
+        allParkCoordinates.forEach(coord => {
+            const url = coord.parkImage;
+            urls.push(url);
+        });
+
+        downloadImages(urls);
+
+    }, [allParkCoordinates]);
     */
     
     const fetchAllParks = async () => {
@@ -177,6 +187,8 @@ export default function HomePage() {
             allNationalParks.forEach(park => {
                 if (park.images.length > 0) {
                     parkURL = park.images[0].url;
+                    //let downloadQuery = `?url=${parkURL}`
+                    //fetch(`http://localhost:3000/api/imageDownloader${downloadQuery}`)
                 }
                 const parkCoords = {parkName: park.fullName, latitude: park.latitude, longitude: park.longitude, parkImage: parkURL,}
                 allParkCoords.push(parkCoords);
@@ -208,6 +220,19 @@ export default function HomePage() {
         }
 
     }, [allParkCoordinates, allNationalParks, totalParks]);
+
+    /*
+    useEffect(() => {
+        const fetchParkImages = async () => {
+            const response = await fetch('http://localhost:3000/api/parkImages');
+            const jsonResponse = response.json;
+            console.log(jsonResponse);
+        }
+
+        fetchParkImages();
+        
+    }, [allNationalParks, allParkCoordinates])
+    */
 
     return (
         <section id='homepage-body'>

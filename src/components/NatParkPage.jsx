@@ -113,7 +113,7 @@ export default function NatParkPage() {
                                 groupedActivities ?
                                 activityNames.map((name) => {
                                     return (
-                                        <div id='activity-name-and-list' name={name}>
+                                        <div id='activity-name-and-list' name={name} key={name}>
                                             <h2 id='activity'>{name}</h2>
                                             <div className='activity-list'>
                                                 {groupedActivities[name].map(activity => {

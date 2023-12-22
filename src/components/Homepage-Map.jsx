@@ -230,6 +230,12 @@ export default function HomepageMap({coordinates, parks}) {
                             image = park.images[0].url
                             : 
                             image = noImageIcon;
+/*                          
+                            **currently configuring aws s3 to decrease image load times**
+                            const newImage = image.replace('www.nps.gov/common/uploads/structured_data/', 'wanderamerica.s3.amazonaws.com/parkImages/images/');
+                            console.log(image, newImage);
+*/
+                            
 
                             return (
                                 <Link 

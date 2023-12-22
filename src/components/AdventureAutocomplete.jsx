@@ -23,7 +23,7 @@ export default function AdventureAutocomplete({ sendActivityToMap }) {
         const activityList = [];
 
         const fetchActivities = async () => {
-            const response = await fetch('https://national-park-application-c44bb8f1d790.herokuapp.com/api/activities');
+            const response = await fetch(`${import.meta.env.VITE_HEROKU_ENDPOINT}/api/activities`);
             const jsonResponse = await response.json();
             jsonResponse.data.forEach((activity) => {
                 activityList.push({
